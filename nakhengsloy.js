@@ -21,8 +21,8 @@ const menuData = {
     "smart-home": {
         title: "project",
         items: [
-            { name: "សៀវភៅរូបមន្ត", url:  "\\fr\\formulaBook\\formulaBook.html" },
-            { name: "កម្រិតទឹក", url: "\\fr\\formulaBook\\waterlevel.html" },
+            { name: "សៀវភៅរូបមន្ត", url:  "fr\formulaBook\formulaBook.html" },
+            { name: "កម្រិតទឹក", url: "fr\formulaBook\waterlevel.html" },
             { name: "shit", url: "thermostats.html" },
             { name: "shit", url: "assistants.html" }
         ]
