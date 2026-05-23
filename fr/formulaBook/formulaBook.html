@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../bootstrap-4.0.0-dist/css/bootstrap.min.css">
+    <title>Document</title>
+ <style>
+    .title{
+        border: 2px black solid;
+    }
+    .i{
+        border: 3px black solid;
+    }
+        .d{
+        border: 3px black solid;
+    }
+    .name{
+        text-align: center;
+        font-family: 'Times New Roman', Times, serif;
+        border: 3px rgb(23, 154, 219) solid;
+        
+    }
+.parent{
+    display: flex;
+    flex-direction: column; /* ADD THIS */
+    justify-content: center;
+    align-items: center;
+}
+table, th, td {
+  border:3px solid black;
+  padding: 5px 5px 5px 5px;
+  font-size: 25px;
+
+}
+th{
+    background-color: rgb(69, 165, 0);
+    color: white;
+}
+.t1{
+    background-color: rgb(227, 228, 226);
+    color: rgb(0, 0, 0);
+}
+
+ </style>
+</head>
+<body><br>
+ <div class="bg-primary title">
+    <h4 class="text-light">សៀវភៅរូបមន្ត / Forumula book</h4>
+ </div>
+ 
+ <div>
+    <p style="font-size: 25px;">១.តើអ្វីទៅជាសៀភៅររូបមន្ត?</p>
+    <div class="row">
+        <div class="col">
+            <p style="font-size: 15px;">សៀវភៅរូបមន្តឬ formula book គឺជាឧបករណ៍មួយដែល display ដែលអាចបញ្ចេញរូបមន្តជាច្រើនតាមតែក្បាលយើងដាក់ក្នុង code</p>
+            <p style="font-size: 15px;">formula book is the display that can show any fucking formula that you put in the code it ez to cheat in exam much easier than phone.</p>
+        </div>
+        <div class="col">
+            <img class="i" src="image\formulabook.png" alt="" width="300px" height="310px">
+        </div>
+        <br>
+   
+    </div>
+     <p style="font-size: 25px;">២.ឧបករណ៍ត្រូវការ</p>
+     <div class="row">
+        <div class="col d" >
+            <img src="image\button.png" alt="" width="130px" height="140px">
+            <p class="name">Button ចំនួន​ ៥</p>
+        </div>
+        <div class="col d">
+            <img src="image\swicth.png" alt=""width="130px" height="140px">
+            <p class="name">swicth ចំនួន​ ២</p>
+        </div>
+                <div class="col d">
+            <img src="image\bat.png" alt=""width="130px" height="140px">
+            <p class="name">ថ្មរចំនួន១ 3.3v</p>
+        </div>
+                <div class="col d">
+            <img src="image\rgb.png" alt=""width="130px" height="140px">
+            <p  class="name">rgb display ចំនួន​ ១</p>
+        </div>
+     </div>
+ </div>
+ <div class="row">
+    <div class="col d">
+        <img src="image\esp32c3supermini.png" alt=""width="130px" height="140px">
+        <p  class="name">esp32 mini</p>
+    </div>
+    <div class="col d">
+        <img src="image\batteryHolder.png" alt=""width="130px" height="140px">
+        <p  class="name">battery holder</p>
+    </div>
+    <div class="col d">
+        <img src="image\buzzer.png" alt=""width="130px" height="140px">
+        <p  class="name">buzzer</p>
+    </div>
+    <div class="col d">
+         <img src="image\pcb.png" alt=""width="130px" height="140px">
+        <p  class="name">pcb board</p>
+    </div>
+ </div>
+ <br><p style="font-size: 25px;">3.Diagram</p> <br>
+ <div class=" parent ">
+     
+     <img src="image\formuladigram.png" alt="">
+ </div><br><br><br><br><br><br><br>
+ <div class="parent" style="text-align: center;">
+ <table style="width: 80%;">
+    <tr>
+        <th>Rgb display</th>
+        <th>Esp32 supermini</th>
+    
+    </tr>
+    <tr>
+        <td class="t1">Gnd</td>
+        <td class="t1">Gnd</td>
+    </tr>
+    <tr>
+        <td class="t2">Vcc</td>
+        <td class="t2">3.3V</td>
+    </tr>
+    <tr>
+        <td class="t1">SCK</td>
+        <td class="t1">4</td>
+    </tr>
+    <tr>
+        <td class="t2">SDA</td>
+        <td class="t2">3</td>
+    </tr>
+    <tr>
+        <td class="t1">RES</td>
+        <td class="t1">0</td>
+    </tr>
+    <tr>
+        <td class="t2">Rs</td>
+        <td class="t2">2</td>
+    </tr>
+    <tr>
+        <td class="t1">Cs</td>
+        <td class="t1">10</td>
+    </tr>
+    <tr>
+        <td class="t2">Blk ឬ LED</td>
+        <td class="t2">3.3v</td>
+    </tr>
+     <tr>
+        <th>Button</th>
+        <th>Esp32 supermini</th>
+    
+    </tr>
+    <tr>
+        <td class="t1">left</td>
+        <td class="t1">5</td>
+    </tr>
+    <tr>
+        <td class="t2">Right</td>
+        <td class="t2">6</td>
+    </tr>
+    <tr>
+        <td class="t1">Top</td>
+        <td class="t1">7</td>
+    </tr>
+    <tr>
+        <td class="t2">Down</td>
+        <td class="t2">20</td>
+    </tr>
+    <tr>
+        <td class="t1">Exit</td>
+        <td class="t1">21</td>
+    </tr>
+    <tr>
+        <td class="t2">Gnd ទាំងអស់</td>
+        <td class="t2">Gnd</td>
+    </tr>
+    <tr>
+       <th>Buzzer</th>
+       <th>esp32c3supermini</th>
+    </tr>
+    <tr>
+        <td class="t2">(+)</td>
+        <td class="t2">8</td>
+    </tr>
+        <tr>
+        <td class="t1">(-)</td>
+        <td class="t1">Gnd</td>
+    </tr>
+ </table><br>
+
+<br><br>
+
+<div class="code1">
+  <iframe
+    id="content-frame"
+    name="content-frame"
+    src="arduino_code_display.html"
+    frameborder="0"
+    width="1000px"
+    height="700px">
+  </iframe>
+</div>
+
+</div>
+</body>
+</html>

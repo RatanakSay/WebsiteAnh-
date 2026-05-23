@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arduino Formula Book & Tetris Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #252526;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            background: #2d2d30;
+            padding: 20px;
+            border-bottom: 2px solid #007acc;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .header h1 {
+            color: #4ec9b0;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #9cdcfe;
+            font-size: 14px;
+        }
+
+        .code-container {
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        pre {
+            margin: 0;
+            white-space: pre;
+            font-size: 13px;
+        }
+
+        code {
+            display: block;
+        }
+
+        /* Syntax highlighting */
+        .keyword { color: #569cd6; }
+        .type { color: #4ec9b0; }
+        .function { color: #dcdcaa; }
+        .string { color: #ce9178; }
+        .comment { color: #6a9955; font-style: italic; }
+        .number { color: #b5cea8; }
+        .preprocessor { color: #c586c0; }
+        .constant { color: #4fc1ff; }
+
+        .line-number {
+            color: #858585;
+            user-select: none;
+            padding-right: 15px;
+            border-right: 1px solid #3e3e42;
+            margin-right: 15px;
+            display: inline-block;
+            min-width: 40px;
+            text-align: right;
+        }
+
+        .controls {
+            padding: 15px 20px;
+            background: #2d2d30;
+            border-top: 1px solid #3e3e42;
+            border-radius: 0 0 8px 8px;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            background: #0e639c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #1177bb;
+        }
+
+        button:active {
+            background: #0d5a8f;
+        }
+
+        .copy-feedback {
+            color: #4ec9b0;
+            padding: 8px 16px;
+            display: none;
+        }
+
+        .copy-feedback.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Arduino Formula Book & Tetris Game</h1>
+            <p>ESP32-C3 project with ST7735 TFT display - Math/Physics formulas viewer and Tetris game</p>
+        </div>
+        
+        <div class="code-container">
+            <pre><code id="code-content">#include &lt;Adafruit_GFX.h&gt;
+#include &lt;Adafruit_ST7735.h&gt;
+#include &lt;SPI.h&gt;
+
+// ── Pins ──────────────────────────────────────────────────────────────────────────
+#define TFT_CLK 4
+#define TFT_MOSI 3
+#define TFT_RES 0
+#define TFT_DC 1
+#define TFT_CS 10
+#define BTN_LEFT 5
+#define BTN_RIGHT 6
+#define BTN_ROT 7
+#define BTN_DROP 20
+#define BTN_EXIT 21
+#define BUZZER 8
+
+Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RES);
+
+#define BLACK 0x0000
+#define WHITE 0xFFFF
+#define DGRAY 0x4228
+
+// ── Buzzer functions ──────────────────────────────────────────────────────────────
+// Uses tone()-style PWM via ledcWrite on ESP32-C3
+void buzzInit() {
+  ledcAttach(BUZZER, 2000, 8);  // pin, freq, resolution — new API (core v3+)
+  ledcWriteTone(BUZZER, 0);
+}
+
+void buzzTone(int freq, int durationMs) {
+  ledcWriteTone(BUZZER, freq);
+  delay(durationMs);
+  ledcWriteTone(BUZZER, 0);
+}
+
+void buzzOff() {
+  ledcWriteTone(BUZZER, 0);
+}
+
+// Sound effects — non-blocking would need timers, these are short so blocking is fine
+void sndMove() { buzzTone(1200, 12); }
+void sndRotate() { buzzTone(1000, 10); delay(10); buzzTone(1400, 10); }
+void sndLand() { buzzTone(300, 25); }
+
+void sndClearLine(int count) {
+  // More lines = more exciting melody
+  if (count == 1) {
+    buzzTone(800, 40); buzzTone(1000, 40); buzzTone(1200, 60);
+  } else if (count == 2) {
+    buzzTone(800, 30); buzzTone(1000, 30); buzzTone(1200, 30); buzzTone(1400, 60);
+  } else if (count == 3) {
+    buzzTone(800, 25); buzzTone(1000, 25); buzzTone(1200, 25); buzzTone(1400, 25); buzzTone(1600, 60);
+  } else {  // Tetris! (4 lines)
+    buzzTone(800, 20); buzzTone(1000, 20); buzzTone(1200, 20); buzzTone(1400, 20); buzzTone(1600, 20); buzzTone(2000, 80);
+  }
+}
+
+void sndLevelUp() {
+  buzzTone(600, 30); buzzTone(800, 30); buzzTone(1000, 30); buzzTone(1200, 80);
+}
+
+void sndGameOver() {
+  buzzTone(600, 80); delay(20); buzzTone(500, 80); delay(20); buzzTone(400, 80); delay(20); buzzTone(300, 150);
+}
+
+void sndMenuClick() { buzzTone(900, 15); }
+void sndSelect() { buzzTone(800, 20); delay(10); buzzTone(1200, 30); }
+void sndExit() { buzzTone(600, 20); delay(10); buzzTone(400, 40); }
+
+// ── Themes ────────────────────────────────────────────────────────────────────────
+struct Theme {
+  uint16_t bg, bar, barText, formula, accent;
+};
+
+Theme themes[] = {
+  { 0x000F, 0x02BF, WHITE, WHITE, 0x051F },
+  { 0x0200, 0x03A0, WHITE, WHITE, 0x07E0 },
+  { 0x2800, 0xFB40, WHITE, WHITE, 0xFDA0 },
+  { 0x1808, 0x780F, WHITE, WHITE, 0xA81F },
+  { 0x2000, 0xF800, WHITE, WHITE, 0xFC10 },
+  { 0x0010, 0x07FF, BLACK, WHITE, 0x0FF0 },
+};
+
+// ── States ────────────────────────────────────────────────────────────────────────
+enum AppState { MENU, SUBJECT, TETRIS };
+AppState appState = MENU;
+
+const char* menuItems[] = { "Math", "Physics", "Basic Elec", "Tetris" };
+const uint8_t menuTheme[] = { 0, 1, 2, 4 };
+const int MENU_COUNT = 4;
+int menuIndex = 0;
+
+// ── Formula struct ────────────────────────────────────────────────────────────────
+struct Formula {
+  const char* title;
+  const char* line1;
+  const char* line2;
+  const char* line3;
+  uint8_t style;
+};
+
+// ── Math ──────────────────────────────────────────────────────────────────────────
+Formula mathFormulas[] = {
+  { "Discriminant", "#=b^2 -4ac", "", "", 0 },
+  { "Discriminant", "if #&gt;0: 2 roots", "if #=0: 1 root", "if #&lt;0: no root", 0 },
+  { "Quadratic", "x=(-b+-sqrt(#))/2a", "", "", 0 },
+  { "multi", "(a+b)^2=a^2+2ab+b^2", "(a-b)^2=a^2-2ab+b^2", "", 3 },
+  { "multi", "(a+b)^3=", "a^3+3a^2 b+3ab^2+b^3", "", 3 },
+  { "multi", "(a-b)^3=", "a^3-3a^2 b+3ab^2-b^3", "", 3 },
+  { "multi", "a^2-b^2=(a-b)(a+b)", "", "", 4 },
+  { "multi", "a^3+b^3=", "(a+b)(a^2-ab+b^2)", "", 4 },
+  { "multi", "a^3-b^3=", "(a-b)(a^2+ab+b^2)", "", 4 },
+};
+const int MATH_COUNT = sizeof(mathFormulas)/sizeof(mathFormulas[0]);
+
+// ── Physics ───────────────────────────────────────────────────────────────────────
+Formula physicsFormulas[] = {
+  { "Transformer", "Vs/Vp=Ns/Np", "IpVp=IsVs", "", 1 },
+  { "Transformer", "Ns/Np&gt;1=step up", "Ns/Np&lt;1=step down", "", 1 },
+  { "Efficiency%", "Rd=(Pe2/Pe1)*100", "Pe1=Pe2+Pj", "", 5 },
+  { "Energy Balance", "Wc1=Wc2+Wj", "Wx=Px*t", "", 1 },
+  { "Express AC", "i=Im.sin(wt+o)", "", "", 2 },
+  { "Frequency", "f=1/T", "f=W/2.pi", "", 1 },
+  { "Power", "P=V*I", "P=I^2 *R", "", 1 },
+  { "Avg speed", "v=Dt/Tt", "Dt=d1+d2+..+dn (m)", "", 5 },
+  { "Acceleration", "a=dV/dT", "", "", 1 },
+};
+const int PHYSICS_COUNT = sizeof(physicsFormulas)/sizeof(physicsFormulas[0]);
+
+// ── Basic Electronics ─────────────────────────────────────────────────────────────
+Formula beFormulas[] = {
+  { "Ohm's Law", "V=I*R", "", "", 2 },
+  { "Power", "P=V*I", "P=I^2 *R", "", 2 },
+  { "Series R", "Rt=R1+R2+R3", "", "", 2 },
+  { "Parallel R", "1/Rt=1/R1+1/R2+1/R3", "", "", 2 },
+  { "Capacitance", "Q=C*V", "", "", 3 },
+  { "Inductor", "L=N^2*uA/e", "N=number round", "r=length(m)", 3 },
+  { "Inductor", "A=area(m^2)", "wi=1.2566*10^-6", "cop=1.2566*10^-6", 3 },
+  { "Inductor", "Ir=6.3*10^-3", "", "", 3 },
+  { "Inductor S", "Leq=L1+..+Ln", "Ieq=I1=..=In", "Veq=v1+..+vn", 3 },
+  { "Inductor P", "1/Leq=1/L1+1/L2", "Veq=V1=..=Vn", "Ieq=I1+..+In", 3 },
+  { "Capacitor", "Q=I.t", "Q=CV", "w=(1/2)CV^2", 4 },
+  { "Capacitor", "E=V/d", "", "", 4 },
+  { "Capacitor", "I=current(A)", "t=time(s)", "Q=elect(c)", 4 },
+  { "Capacitor", "C=capacitor(F)", "V=voltage(v)", "W=power(j)", 4 },
+  { "Capacitor", "d=distance(cm)", "E=elec(Kv/cm)", "", 4 },
+  { "Capacitor S", "Q=Q1=..=Qn", "V=V1+..+Vn", "1/C=1/C1+..1/Cn", 4 },
+  { "Capacitor P", "V=V1=..Vn", "Q=Q1+..Qn", "C=C1+C2+..Cn", 4 },
+};
+const int BE_COUNT = sizeof(beFormulas)/sizeof(beFormulas[0]);
+
+int formulaIndex = 0;
+int formulaCount = 0;
+Formula* currentFormulas = nullptr;
+uint8_t prevStyle = 255;
+
+// ── Forward declarations ──────────────────────────────────────────────────────────
+void drawMenuFull();
+void updateMenuRow(int i);
+void enterSubject();
+void drawFormulaFull();
+void updateFormulaContent();
+void drawFormulaContent(Formula&amp; f, Theme&amp; t);
+void drawFormulaPart(int x, int y, const char* text, uint16_t color, uint16_t bg);
+int drawDelta(int x, int y, uint16_t color);
+void initTetris();
+void runTetris();
+void handleTetrisButtons();
+void handleMenuButtons();
+
+// ═══════════════════════════════════════════════════════════════════════════════════
+// TETRIS
+// ═══════════════════════════════════════════════════════════════════════════════════
+
+#define T_COLS 10
+#define T_ROWS 18
+#define T_SIZE 7  // slightly bigger cells on 160px wide screen
+#define T_XOFF 6
+#define T_YOFF 4
+#define PANEL_X 82  // score panel X (board ends at 6+10*7=76, panel at 82)
+
+uint8_t board[T_ROWS][T_COLS];
+
+uint16_t pieceColors[] = {
+  BLACK,
+  0x07FF,  // cyan I
+  0xFFE0,  // yellow O
+  0xF81F,  // purple T
+  0x001F,  // blue J
+  0xFDA0,  // orange L
+  0x07E0,  // green S
+  0xF800,  // red Z
+};
+
+const uint8_t PIECES[7][4][4] = {
+  {{ 0b0000,0b1111,0b0000,0b0000 },{ 0b0010,0b0010,0b0010,0b0010 },{ 0b0000,0b1111,0b0000,0b0000 },{ 0b0010,0b0010,0b0010,0b0010 }},
+  {{ 0b0110,0b0110,0b0000,0b0000 },{ 0b0110,0b0110,0b0000,0b0000 },{ 0b0110,0b0110,0b0000,0b0000 },{ 0b0110,0b0110,0b0000,0b0000 }},
+  {{ 0b0100,0b1110,0b0000,0b0000 },{ 0b0100,0b0110,0b0100,0b0000 },{ 0b1110,0b0100,0b0000,0b0000 },{ 0b0100,0b1100,0b0100,0b0000 }},
+  {{ 0b1000,0b1110,0b0000,0b0000 },{ 0b0110,0b0100,0b0100,0b0000 },{ 0b1110,0b0010,0b0000,0b0000 },{ 0b0100,0b0100,0b1100,0b0000 }},
+  {{ 0b0010,0b1110,0b0000,0b0000 },{ 0b0100,0b0100,0b0110,0b0000 },{ 0b1110,0b1000,0b0000,0b0000 },{ 0b1100,0b0100,0b0100,0b0000 }},
+  {{ 0b0110,0b1100,0b0000,0b0000 },{ 0b1000,0b1100,0b0100,0b0000 },{ 0b0110,0b1100,0b0000,0b0000 },{ 0b1000,0b1100,0b0100,0b0000 }},
+  {{ 0b1100,0b0110,0b0000,0b0000 },{ 0b0100,0b1100,0b1000,0b0000 },{ 0b1100,0b0110,0b0000,0b0000 },{ 0b0100,0b1100,0b1000,0b0000 }},
+};
+
+int curPiece, curRot, curX, curY;
+uint32_t score = 0;
+int level = 1;
+int lines = 0;
+bool gameOver = false;
+int prevLevel = 1;
+unsigned long lastDrop = 0;
+unsigned long lastMove = 0;
+unsigned long lastRotPress = 0;
+unsigned long lastExitPress = 0;
+
+#define NORMAL_DROP 500
+#define SOFT_DROP 80
+#define MOVE_REPEAT 120
+#define ROT_DEBOUNCE 180
+#define EXIT_DEBOUNCE 300
+
+int dropInterval = NORMAL_DROP;
+
+void drawCell(int col, int row, uint8_t ci) {
+  int px = T_XOFF + col*T_SIZE;
+  int py = T_YOFF + row*T_SIZE;
+  if (ci == 0) {
+    tft.fillRect(px, py, T_SIZE-1, T_SIZE-1, BLACK);
+  } else {
+    tft.fillRect(px, py, T_SIZE-1, T_SIZE-1, pieceColors[ci]);
+    tft.drawRect(px, py, T_SIZE-1, T_SIZE-1, WHITE);
+  }
+}
+
+void drawPiece(int px, int py, int piece, int rot, bool erase) {
+  for (int r=0; r&lt;4; r++) {
+    uint8_t row = PIECES[piece][rot][r];
+    for (int c=0; c&lt;4; c++) {
+      if (row &amp; (0b1000&gt;&gt;c)) {
+        int bx=px+c, by=py+r;
+        if (by&gt;=0 &amp;&amp; by&lt;T_ROWS &amp;&amp; bx&gt;=0 &amp;&amp; bx&lt;T_COLS)
+          drawCell(bx, by, erase ? 0 : (piece+1));
+      }
+    }
+  }
+}
+
+bool collides(int px, int py, int piece, int rot) {
+  for (int r=0; r&lt;4; r++) {
+    uint8_t row = PIECES[piece][rot][r];
+    for (int c=0; c&lt;4; c++) {
+      if (row &amp; (0b1000&gt;&gt;c)) {
+        int bx=px+c, by=py+r;
+        if (bx&lt;0 || bx&gt;=T_COLS || by&gt;=T_ROWS) return true;
+        if (by&gt;=0 &amp;&amp; board[by][bx]) return true;
+      }
+    }
+  }
+  return false;
+}
+
+void lockPiece() {
+  for (int r=0; r&lt;4; r++) {
+    uint8_t row = PIECES[curPiece][curRot][r];
+    for (int c=0; c&lt;4; c++) {
+      if (row &amp; (0b1000&gt;&gt;c)) {
+        int bx=curX+c, by=curY+r;
+        if (by&gt;=0 &amp;&amp; by&lt;T_ROWS &amp;&amp; bx&gt;=0 &amp;&amp; bx&lt;T_COLS)
+          board[by][bx] = curPiece+1;
+      }
+    }
+  }
+}
+
+void redrawBoard() {
+  for (int r=0; r&lt;T_ROWS; r++)
+    for (int c=0; c&lt;T_COLS; c++)
+      drawCell(c, r, board[r][c]);
+}
+
+void updateScore() {
+  tft.fillRect(PANEL_X, T_YOFF, 160-PANEL_X, 110, BLACK);
+  tft.setTextSize(1);
+  tft.setTextColor(WHITE, BLACK);
+  tft.setCursor(PANEL_X, T_YOFF+2);
+  tft.print("SCORE");
+  tft.setCursor(PANEL_X, T_YOFF+12);
+  tft.print(score);
+  tft.setCursor(PANEL_X, T_YOFF+28);
+  tft.print("LEVEL");
+  tft.setCursor(PANEL_X, T_YOFF+38);
+  tft.print(level);
+  tft.setCursor(PANEL_X, T_YOFF+54);
+  tft.print("LINES");
+  tft.setCursor(PANEL_X, T_YOFF+64);
+  tft.print(lines);
+  
+  // Controls hint
+  tft.setTextColor(DGRAY, BLACK);
+  tft.setCursor(PANEL_X, T_YOFF+82);
+  tft.print("&lt; &gt;");
+  tft.setCursor(PANEL_X, T_YOFF+92);
+  tft.print("^ rot");
+  tft.setCursor(PANEL_X, T_YOFF+102);
+  tft.print("v soft");
+  tft.setCursor(PANEL_X, T_YOFF+112);
+  tft.print("X exit");
+}
+
+void clearLines() {
+  int cleared = 0;
+  for (int r=T_ROWS-1; r&gt;=0; r--) {
+    bool full = true;
+    for (int c=0; c&lt;T_COLS; c++)
+      if (!board[r][c]) { full=false; break; }
+    if (full) {
+      cleared++;
+      for (int rr=r; rr&gt;0; rr--)
+        for (int c=0; c&lt;T_COLS; c++)
+          board[rr][c] = board[rr-1][c];
+      for (int c=0; c&lt;T_COLS; c++)
+        board[0][c]=0;
+      r++;
+    }
+  }
+  if (cleared &gt; 0) {
+    int pts[] = {0, 100, 300, 500, 800};
+    score += (uint32_t)pts[min(cleared,4)] * level;
+    lines += cleared;
+    int newLevel = lines/10 + 1;
+    if (newLevel &gt; level) {
+      level = newLevel;
+      dropInterval = max(NORMAL_DROP - (level-1)*40, 100);
+      sndLevelUp();  // level up sound
+    } else {
+      sndClearLine(cleared);  // line clear sound
+    }
+    redrawBoard();
+    updateScore();
+  }
+}
+
+void spawnPiece() {
+  curPiece = random(7);
+  curRot = 0;
+  curX = T_COLS/2 - 2;
+  curY = 0;
+  if (collides(curX, curY, curPiece, curRot)) {
+    gameOver = true;
+    sndGameOver();
+    tft.fillRect(T_XOFF, T_YOFF+T_ROWS*T_SIZE/2-18, T_COLS*T_SIZE, 38, BLACK);
+    tft.setTextColor(0xF800, BLACK);
+    tft.setTextSize(1);
+    tft.setCursor(T_XOFF+4, T_YOFF+T_ROWS*T_SIZE/2-10);
+    tft.print("GAME OVER");
+    tft.setTextColor(WHITE, BLACK);
+    tft.setCursor(T_XOFF+1, T_YOFF+T_ROWS*T_SIZE/2+2);
+    tft.print("ROT=restart");
+    tft.setCursor(T_XOFF+1, T_YOFF+T_ROWS*T_SIZE/2+12);
+    tft.print("EXIT=menu");
+  }
+}
+
+void initTetris() {
+  memset(board, 0, sizeof(board));
+  score=0; level=1; lines=0; prevLevel=1;
+  dropInterval = NORMAL_DROP;
+  gameOver = false;
+  tft.fillScreen(BLACK);
+  tft.drawRect(T_XOFF-1, T_YOFF-1, T_COLS*T_SIZE+2, T_ROWS*T_SIZE+2, DGRAY);
+  redrawBoard();
+  updateScore();
+  spawnPiece();
+  if (!gameOver) drawPiece(curX, curY, curPiece, curRot, false);
+  lastDrop = millis();
+}
+
+void runTetris() {
+  if (gameOver) return;
+  unsigned long now = millis();
+  bool dropHeld = (digitalRead(BTN_DROP) == LOW);
+  int interval = dropHeld ? SOFT_DROP : dropInterval;
+  
+  if (now - lastDrop &gt;= (unsigned long)interval) {
+    lastDrop = now;
+    drawPiece(curX, curY, curPiece, curRot, true);
+    if (!collides(curX, curY+1, curPiece, curRot)) {
+      curY++;
+      drawPiece(curX, curY, curPiece, curRot, false);
+    } else {
+      drawPiece(curX, curY, curPiece, curRot, false);
+      lockPiece();
+      sndLand();
+      clearLines();
+      spawnPiece();
+      if (!gameOver) drawPiece(curX, curY, curPiece, curRot, false);
+    }
+  }
+}
+
+void handleTetrisButtons() {
+  if (gameOver) return;
+  unsigned long now = millis();
+  bool left = (digitalRead(BTN_LEFT) == LOW);
+  bool right= (digitalRead(BTN_RIGHT) == LOW);
+  bool rot = (digitalRead(BTN_ROT) == LOW);
+  
+  // Left / Right with repeat
+  if ((left||right) &amp;&amp; now-lastMove &gt;= MOVE_REPEAT) {
+    lastMove = now;
+    drawPiece(curX, curY, curPiece, curRot, true);
+    if (left &amp;&amp; !collides(curX-1, curY, curPiece, curRot)) {
+      curX--; sndMove();
+    }
+    if (right &amp;&amp; !collides(curX+1, curY, curPiece, curRot)) {
+      curX++; sndMove();
+    }
+    drawPiece(curX, curY, curPiece, curRot, false);
+  }
+  
+  // Rotate with wall kick
+  if (rot &amp;&amp; now-lastRotPress &gt;= ROT_DEBOUNCE) {
+    lastRotPress = now;
+    int nr = (curRot+1)%4;
+    bool rotated = false;
+    int kicks[] = {0, 1, -1, 2, -2};  // try center, right, left, far right, far left
+    for (int k : kicks) {
+      if (!collides(curX+k, curY, curPiece, nr)) {
+        drawPiece(curX, curY, curPiece, curRot, true);
+        curX += k;
+        curRot = nr;
+        drawPiece(curX, curY, curPiece, curRot, false);
+        sndRotate();
+        rotated = true;
+        break;
+      }
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════════
+// FORMULA RENDERER
+// ═══════════════════════════════════════════════════════════════════════════════════
+
+int drawDelta(int x, int y, uint16_t color) {
+  int w=7, h=7;
+  tft.drawLine(x+w/2,y-h,x,y,color);
+  tft.drawLine(x+w/2,y-h,x+w,y,color);
+  tft.drawLine(x,y,x+w,y,color);
+  return x+w+1;
+}
+
+void drawFormulaPart(int x, int y, const char* text, uint16_t color, uint16_t bg) {
+  int i=0;
+  while (text[i]!='\0') {
+    if (text[i]=='#') {
+      x=drawDelta(x,y,color);
+      i++;
+    } else if (text[i]=='^') {
+      i++;
+      tft.setTextColor(color,bg);
+      while (text[i] &amp;&amp; text[i]!=' ' &amp;&amp; text[i]!='+' &amp;&amp; text[i]!='-' &amp;&amp; text[i]!='=' &amp;&amp; text[i]!=')' &amp;&amp; text[i]!='(') {
+        tft.setTextSize(1);
+        tft.setCursor(x,y-4);
+        tft.print(text[i]);
+        x+=5;
+        i++;
+      }
+    } else {
+      tft.setTextSize(1);
+      tft.setTextColor(color,bg);
+      tft.setCursor(x,y);
+      tft.print(text[i]);
+      x+=6;
+      i++;
+    }
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────────
+
+void setup() {
+  tft.initR(INITR_REDTAB);
+  Serial.begin(115200);
+  randomSeed(analogRead(0));
+  
+  pinMode(BTN_LEFT, INPUT_PULLUP);
+  pinMode(BTN_RIGHT, INPUT_PULLUP);
+  pinMode(BTN_ROT, INPUT_PULLUP);
+  pinMode(BTN_DROP, INPUT_PULLUP);
+  pinMode(BTN_EXIT, INPUT_PULLUP);
+  
+  buzzInit();
+  
+  tft.initR(INITR_BLACKTAB);
+  tft.setRotation(1);
+  tft.fillScreen(BLACK);
+  
+  // Splash
+  tft.setTextSize(2);
+  tft.setTextColor(0x051F);
+  tft.setCursor(30,18);
+  tft.print("Formula");
+  tft.setTextColor(WHITE);
+  tft.setCursor(52,40);
+  tft.print("Book");
+  
+  tft.setTextSize(1);
+  tft.setTextColor(themes[0].bar);
+  tft.setCursor(56,70);
+  tft.print("Math");
+  tft.setTextColor(themes[1].bar);
+  tft.setCursor(44,84);
+  tft.print("Physics");
+  tft.setTextColor(themes[2].bar);
+  tft.setCursor(30,98);
+  tft.print("Basic Elec");
+  tft.setTextColor(0xF800);
+  tft.setCursor(56,112);
+  tft.print("Tetris");
+  
+  // Startup jingle
+  buzzTone(523, 80); delay(20);
+  buzzTone(659, 80); delay(20);
+  buzzTone(784, 120);
+  
+  delay(1200);
+  drawMenuFull();
+}
+
+void loop() {
+  if (appState == TETRIS) {
+    runTetris();
+    if (!gameOver) handleTetrisButtons();
+    
+    // EXIT button — leave tetris any time
+    unsigned long now = millis();
+    if (digitalRead(BTN_EXIT)==LOW &amp;&amp; now-lastExitPress &gt; EXIT_DEBOUNCE) {
+      lastExitPress = now;
+      sndExit();
+      appState = MENU;
+      drawMenuFull();
+      return;
+    }
+    
+    // Game over: ROT=restart, EXIT=menu
+    if (gameOver) {
+      if (digitalRead(BTN_ROT)==LOW &amp;&amp; now-lastRotPress &gt; 300) {
+        lastRotPress = now;
+        initTetris();
+      }
+    }
+    delay(10);
+    return;
+  }
+  
+  handleMenuButtons();
+  delay(10);
+}
+
+// ── Menu &amp; Formula buttons ────────────────────────────────────────────────────────
+
+unsigned long menuLastPress = 0;
+#define MENU_DEBOUNCE 150
+
+void handleMenuButtons() {
+  unsigned long now = millis();
+  if (now - menuLastPress &lt; MENU_DEBOUNCE) return;
+  
+  bool left = (digitalRead(BTN_LEFT) == LOW);
+  bool right = (digitalRead(BTN_RIGHT) == LOW);
+  bool rot = (digitalRead(BTN_ROT) == LOW);
+  bool drop = (digitalRead(BTN_DROP) == LOW);
+  bool ex = (digitalRead(BTN_EXIT) == LOW);
+  
+  if (!left &amp;&amp; !right &amp;&amp; !rot &amp;&amp; !drop &amp;&amp; !ex) return;
+  
+  menuLastPress = now;
+  
+  if (appState == MENU) {
+    if (left) {
+      int p=menuIndex;
+      menuIndex=(menuIndex-1+MENU_COUNT)%MENU_COUNT;
+      updateMenuRow(p);
+      updateMenuRow(menuIndex);
+      sndMenuClick();
+    }
+    if (right) {
+      int p=menuIndex;
+      menuIndex=(menuIndex+1)%MENU_COUNT;
+      updateMenuRow(p);
+      updateMenuRow(menuIndex);
+      sndMenuClick();
+    }
+    if (rot) {
+      sndSelect();
+      if (menuIndex==3) {
+        appState=TETRIS;
+        initTetris();
+      } else {
+        enterSubject();
+        drawFormulaFull();
+      }
+    }
+  } else {  // SUBJECT
+    if (left) {
+      formulaIndex=(formulaIndex-1+formulaCount)%formulaCount;
+      updateFormulaContent();
+      sndMenuClick();
+    }
+    if (right) {
+      formulaIndex=(formulaIndex+1)%formulaCount;
+      updateFormulaContent();
+      sndMenuClick();
+    }
+    if (drop || ex) {
+      sndExit();
+      appState=MENU;
+      drawMenuFull();
+    }
+  }
+}
+
+// ── Menu ──────────────────────────────────────────────────────────────────────────
+
+void drawMenuFull() {
+  tft.fillScreen(BLACK);
+  tft.fillRect(0,0,160,18,WHITE);
+  tft.setTextColor(BLACK);
+  tft.setTextSize(1);
+  tft.setCursor(24,6);
+  tft.print("SELECT SUBJECT");
+  for (int i=0; i&lt;MENU_COUNT; i++) updateMenuRow(i);
+}
+
+void updateMenuRow(int i) {
+  int y = 22+i*26;
+  Theme&amp; t = themes[menuTheme[i]];
+  tft.fillRect(4,y,152,22,BLACK);
+  if (i==menuIndex) {
+    tft.fillRoundRect(4,y,152,22,4,t.bar);
+    tft.setTextColor(WHITE,t.bar);
+  } else {
+    tft.drawRoundRect(4,y,152,22,4,t.bar);
+    tft.setTextColor(t.bar,BLACK);
+  }
+  tft.setTextSize(1);
+  tft.setCursor(12,y+7);
+  tft.print(menuItems[i]);
+}
+
+void enterSubject() {
+  formulaIndex=0;
+  appState=SUBJECT;
+  switch (menuIndex) {
+    case 0: currentFormulas=mathFormulas; formulaCount=MATH_COUNT; break;
+    case 1: currentFormulas=physicsFormulas; formulaCount=PHYSICS_COUNT; break;
+    case 2: currentFormulas=beFormulas; formulaCount=BE_COUNT; break;
+  }
+}
+
+// ── Formula ───────────────────────────────────────────────────────────────────────
+
+void drawFormulaFull() {
+  Formula&amp; f=currentFormulas[formulaIndex];
+  Theme&amp; t=themes[f.style];
+  tft.fillScreen(t.bg);
+  tft.fillRect(0,0,160,20,t.bar);
+  tft.fillRect(0,20,160,2,t.accent);
+  tft.setTextSize(1);
+  tft.setTextColor(t.barText,t.bar);
+  tft.setCursor(4,7);
+  tft.print(f.title);
+  drawFormulaContent(f,t);
+  prevStyle=f.style;
+}
+
+void updateFormulaContent() {
+  Formula&amp; f=currentFormulas[formulaIndex];
+  Theme&amp; t=themes[f.style];
+  if (f.style!=prevStyle) {
+    drawFormulaFull();
+    return;
+  }
+  tft.fillRect(0,0,160,20,t.bar);
+  tft.setTextSize(1);
+  tft.setTextColor(t.barText,t.bar);
+  tft.setCursor(4,7);
+  tft.print(f.title);
+  tft.fillRect(0,22,160,96,t.bg);
+  drawFormulaContent(f,t);
+}
+
+void drawFormulaContent(Formula&amp; f, Theme&amp; t) {
+  bool has2 = f.line2[0]!='\0';
+  bool has3 = f.line3[0]!='\0';
+  if (!has2 &amp;&amp; !has3) {
+    drawFormulaPart(4, 62, f.line1, t.formula, t.bg);
+  } else if (has2 &amp;&amp; !has3) {
+    drawFormulaPart(4, 48, f.line1, t.formula, t.bg);
+    drawFormulaPart(4, 68, f.line2, t.formula, t.bg);
+  } else {
+    drawFormulaPart(4, 38, f.line1, t.formula, t.bg);
+    drawFormulaPart(4, 56, f.line2, t.formula, t.bg);
+    drawFormulaPart(4, 74, f.line3, t.formula, t.bg);
+  }
+  
+  char pg[8];
+  snprintf(pg,sizeof(pg),"%d/%d",formulaIndex+1,formulaCount);
+  tft.setTextSize(1);
+  tft.setTextColor(t.accent,t.bg);
+  tft.setCursor(160-strlen(pg)*6-3, 120);
+  tft.print(pg);
+}</code></pre>
+        </div>
+        
+        <div class="controls">
+            <button onclick="copyCode()">Copy Code</button>
+            <button onclick="downloadCode()">Download .ino</button>
+            <span class="copy-feedback" id="feedback">Copied!</span>
+        </div>
+    </div>
+
+    <script>
+        function copyCode() {
+            const codeElement = document.getElementById('code-content');
+            const text = codeElement.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const feedback = document.getElementById('feedback');
+                feedback.classList.add('show');
+                setTimeout(() => {
+                    feedback.classList.remove('show');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+        
+        function downloadCode() {
+            const codeElement = document.getElementById('code-content');
+            const text = codeElement.textContent;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'formula_book_tetris.ino';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
