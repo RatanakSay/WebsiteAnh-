@@ -1,9 +1,99 @@
+// ====================================
+// SIDEBAR TOGGLE FUNCTIONALITY
+// ====================================
+const sidebarToggle = document.getElementById('sidebarToggle');
+const sidebar = document.getElementById('sidebar');
+const content = document.getElementById('content');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+let sidebarVisible = true;
+
+// Check if mobile
+function isMobile() {
+    return window.innerWidth <= 768;
+}
+
+// Initialize sidebar state based on screen size
+function initSidebarState() {
+    if (isMobile()) {
+        sidebar.classList.add('hidden');
+        sidebar.classList.remove('visible');
+        content.classList.add('expanded');
+        sidebarVisible = false;
+    } else {
+        sidebar.classList.remove('hidden');
+        sidebar.classList.remove('visible');
+        content.classList.remove('expanded');
+        sidebarVisible = true;
+    }
+}
+
+// Toggle sidebar
+function toggleSidebar() {
+    sidebarVisible = !sidebarVisible;
+    
+    if (isMobile()) {
+        // Mobile behavior
+        if (sidebarVisible) {
+            sidebar.classList.remove('hidden');
+            sidebar.classList.add('visible');
+            sidebarOverlay.classList.add('active');
+        } else {
+            sidebar.classList.add('hidden');
+            sidebar.classList.remove('visible');
+            sidebarOverlay.classList.remove('active');
+        }
+    } else {
+        // Desktop behavior
+        if (sidebarVisible) {
+            sidebar.classList.remove('hidden');
+            content.classList.remove('expanded');
+        } else {
+            sidebar.classList.add('hidden');
+            content.classList.add('expanded');
+        }
+    }
+}
+
+// Event listeners
+sidebarToggle.addEventListener('click', toggleSidebar);
+
+// Close sidebar when clicking overlay (mobile only)
+sidebarOverlay.addEventListener('click', function() {
+    if (isMobile() && sidebarVisible) {
+        toggleSidebar();
+    }
+});
+
+// Close sidebar when clicking a link on mobile
+sidebar.addEventListener('click', function(e) {
+    if (isMobile() && e.target.tagName === 'A') {
+        toggleSidebar();
+    }
+});
+
+// Reinitialize on window resize
+let resizeTimer;
+window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+        initSidebarState();
+    }, 250);
+});
+
+// Initialize on page load
+initSidebarState();
+
+// ====================================
+// MENU DATA & CONTENT MANAGEMENT
+// ====================================
+
 // Data routing links Top Dropdown Menu items to Sidebar lists and local HTML target paths
 const menuData = {
     "consumer": {
         title: "Project",
         items: [
-            { name: "s", url:"kk.html" },
+            { name: "s", url: "kk.html" },
             { name: "SIna", url: "laptops.html" },
             { name: "shit", url: "audio.html" },
             { name: "MORE shit", url: "wearables.html" }
@@ -18,15 +108,15 @@ const menuData = {
             { name: "Relays & Switches", url: "switches.html" }
         ]
     },
-"smart-home": {
-    title: "project",
-    items: [
-        { name: "សៀវភៅរូបមន្ត", url: "fr/formulaBook/formulaBook.html" },
-        { name: "កម្រិតទឹក", url: "fr/formulaBook/waterlevel.html" },
-        { name: "shit", url: "thermostats.html" },
-        { name: "shit", url: "assistants.html" }
-    ]
-}
+    "smart-home": {
+        title: "project",
+        items: [
+            { name: "សៀវភៅរូបមន្ត", url: "fr\\formulaBook\\formulaBook.html" },
+            { name: "កម្រិតទឹក", url: "fr\\formulaBook\\waterlevel.html" },
+            { name: "shit", url: "thermostats.html" },
+            { name: "shit", url: "assistants.html" }
+        ]
+    }
 };
 
 // DOM Elements
