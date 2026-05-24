@@ -94,18 +94,15 @@ const menuData = {
         title: "Project",
         items: [
             { name: "s", url: "kk.html" },
-            { name: "SIna", url: "laptops.html" },
-            { name: "shit", url: "audio.html" },
-            { name: "MORE shit", url: "wearables.html" }
+
         ]
     },
     "components": {
         title: "Circuit Components",
         items: [
-            { name: "Microcontrollers", url: "microcontrollers.html" },
-            { name: "Resistors & Capacitors", url: "resistors.html" },
-            { name: "Sensors & Modules", url: "sensors.html" },
-            { name: "Relays & Switches", url: "switches.html" }
+            { name: "Resistor/រេសុីស្តង់", url: "componet\\Resistor.html" },
+            
+
         ]
     },
     "smart-home": {
@@ -113,8 +110,6 @@ const menuData = {
         items: [
             { name: "សៀវភៅរូបមន្ត", url: "fr\\formulaBook\\formulaBook.html" },
             { name: "កម្រិតទឹក", url: "fr\\formulaBook\\waterlevel.html" },
-            { name: "shit", url: "thermostats.html" },
-            { name: "shit", url: "assistants.html" }
         ]
     }
 };
