@@ -15,6 +15,10 @@
             <div class="tagline">Website Anh</div>
         </div>
         
+        <button class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
         <nav class="nav-menu">
             <div class="dropdown">
                 <button class="dropbtn">
@@ -29,15 +33,18 @@
         </nav>
     </header>
 
+    <!-- Overlay for mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <div class="main-container">
         
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <h3 id="sidebar-title">Project</h3>
             <ul id="sidebar-menu">
-                </ul>
+            </ul>
         </aside>
 
-        <main class="content">
+        <main class="content" id="content">
             <iframe id="content-frame" name="content-frame" src="fr\formulaBook\formulaBook.html" frameborder="0"></iframe>
         </main>
     </div>
