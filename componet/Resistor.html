@@ -3,154 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-        <link rel="stylesheet" href="../bootstrap-4.0.0-dist/css/bootstrap.min.css">
-        <style>
-            table, th, td {
-                 border:3px solid black;
-                  padding: 5px 5px 5px 5px;
-                     font-size: 25px;
-
-}
-th{
-    background-color: rgb(255, 255, 255);
-    color: rgb(0, 0, 0);
-}
-table {
-    margin: auto;
-}
-        </style>
+    <title>Resistor Color Code</title>
+    <!-- Combined Bootstrap CSS link (Keep your local one if offline, but this ensures it loads everywhere) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    
+    <style>
+        /* Custom responsive styles */
+        .table-custom th, .table-custom td {
+            border: 2px solid black;
+            padding: 8px;
+            /* Using dynamic viewport units or smaller base font so it fits mobile screens */
+            font-size: 1.1rem; 
+        }
+        .table-custom th {
+            background-color: rgb(255, 255, 255);
+            color: rgb(0, 0, 0);
+        }
+        .table-custom {
+            margin: auto;
+            width: 100%;
+            max-width: 800px;
+        }
+        /* Color band helper for visibility */
+        .color-preview {
+            width: 40px;
+            height: 25px;
+            margin: auto;
+            border: 1px solid #ccc;
+        }
+    </style>
 </head>
 <body>
-    <br>
-    <h2 class="bg-primary" style="color: white; text-align: center;">Resistor ឬ រេសុីស្តង់</h2>
-    <div class="row">
-        <div class="col-4">
-        <img src="../image/resistor.jpg" alt="">
-        <p style="text-align: center;">Resistor</p>
+
+<div class="container my-4">
+    <!-- Header Section -->
+    <h2 class="bg-primary text-white text-center py-3 rounded">Resistor ឬ រេសុីស្តង់</h2>
+    
+    <!-- Info Section -->
+    <div class="row align-items-center my-4">
+        <div class="col-md-4 text-center mb-3 mb-md-0">
+            <!-- Added img-fluid to make the image scale with the column size -->
+            <img src="../image/resistor.jpg" alt="Resistor" class="img-fluid rounded shadow-sm">
+            <p class="text-muted mt-2">Resistor</p>
         </div>
-        <div class="col-8">
-            <p style="font-family: Arial, Helvetica, sans-serif; font-size: 28px;">រេសុីស្តង់គឺជាគ្រឿងអេឡិចត្រូនិចមួយដែលមាននាទីគ្រប់គ្រង់ចរន្តអគ្គិសនីដូចជាកាត់បន្ថយចរន្តនិងការពារសៀគ្វីផ្សេងៗកុំឲឆេះ។</p>
-            <p style="font-family: Arial, Helvetica, sans-serif; font-size: 28px;">Resistor is a componet that controll and limited electronic flow like reduce current and protect circult from overheat.</p>
+        <div class="col-md-8">
+            <p class="font-weight-normal text-dark" style="font-size: 1.3rem; line-height: 1.6;">
+                រេសុីស្តង់គឺជាគ្រឿងអេឡិចត្រូនិចមួយដែលមាននាទីគ្រប់គ្រង់ចរន្តអគ្គិសនីដូចជាកាត់បន្ថយចរន្តនិងការពារសៀគ្វីផ្សេងៗកុំឲឆេះ។
+            </p>
+            <p class="text-secondary italic" style="font-size: 1.2rem; line-height: 1.6;">
+                Resistor is a component that controls and limits electronic flow like reducing current and protecting circuits from overheating.
+            </p>
         </div>
-        
-    </div><br>
-    <h2 style="text-align: center; ">របៀបមេីលតម្លៃរេសុីស្តង់</h2>
-    <br><br>
-    <table style="text-align: center;">
-        <tr>
-            <th>ពណ៌</th>
-            <th style="width: 50px;">color</th>
-            <th>band 1</th>
-            <th>band 2</th>
-            <th>band 3 គុណ</th>
-            <th>band 4​ </th>
-        </tr>
-        <tr>
-            <td>ខ្មៅ/black</td>
-            <td style="background-color: black;"></td>
-            <td>0</td>
-            <td>0</td>
-            <td>x1</td>
-            <td></td>
-        </tr>
+    </div>
+
+    <!-- Table Section Header -->
+    <h3 class="text-center my-4">របៀបមើលតម្លៃរេសុីស្តង់</h3>
+    
+    <!-- Table Wrapper: table-responsive makes the table horizontally scrollable ONLY on small screens instead of breaking the page layout -->
+    <div class="table-responsive">
+        <table class="table table-bordered text-center table-custom">
+            <thead>
                 <tr>
-            <td>ត្នោ/brown</td>
-            <td style="background-color: rgb(87, 53, 53);"></td>
-            <td>1</td>
-            <td>1</td>
-            <td>x10</td>
-            <td>1%</td>
-        </tr>
+                    <th>ពណ៌ / Color</th>
+                    <th>Band</th>
+                    <th>Band 1</th>
+                    <th>Band 2</th>
+                    <th>Band 3 (គុណ)</th>
+                    <th>Band 4</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ខ្មៅ/black</td>
+                    <td style="background-color: black;"></td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>x1</td>
+                    <td></td>
                 </tr>
                 <tr>
-            <td>ក្រហម/red</td>
-            <td style="background-color: rgb(255, 0, 0);"></td>
-            <td>2</td>
-            <td>2</td>
-            <td>x100</td>
-            <td>2%</td>
-        </tr>
-                        <tr>
-            <td>ទឹកក្រូច/orange</td>
-            <td style="background-color: rgb(255, 162, 0);"></td>
-            <td>3</td>
-            <td>3</td>
-            <td>x1k</td>
-            <td></td>
-        </tr>
-                        <tr>
-            <td>លឿង/yellow</td>
-            <td style="background-color: rgb(248, 255, 43);"></td>
-            <td>4</td>
-            <td>4</td>
-            <td>x10k</td>
-            <td></td>
-        </tr>
-                        <tr>
-            <td>បៃតង/green</td>
-            <td style="background-color: rgb(21, 255, 0);"></td>
-            <td>5</td>
-            <td>5</td>
-            <td>x100k</td>
-            <td>0.5%</td>
-        </tr>
-                        <tr>
-            <td>ខៀវ/blue</td>
-            <td style="background-color: rgb(17, 0, 255);"></td>
-            <td>6</td>
-            <td>6</td>
-            <td>x1M</td>
-            <td>0.25%</td>
-        </tr>                <tr>
-            <td>Violet</td>
-            <td style="background-color:violet"></td>
-            <td>7</td>
-            <td>7</td>
-            <td>x10M</td>
-            <td>0.10%</td>
-        </tr>
-                        <tr>
-            <td>ប្រផេះ/grey</td>
-            <td style="background-color:gray;"></td>
-            <td>8</td>
-            <td>8</td>
-            <td>x100M</td>
-            <td>0.05%</td>
-        </tr>
-                        <tr>
-            <td>ស/White</td>
-            <td style="background-color: rgb(255, 255, 255);"></td>
-            <td>9</td>
-            <td>9</td>
-            <td>x1G</td>
-            <td></td>
-        </tr>
-                        <tr>
-            <td>មាស/Gold</td>
-            <td style="background-color:gold;"></td>
-            <td></td>
-            <td></td>
-            <td>x0.1</td>
-            <td>5%</td>
-        </tr>
-                        <tr>
-            <td>ប្រាក់/Silver</td>
-            <td style="background-color: silver;"></td>
-            <td></td>
-            <td></td>
-            <td>x0.01</td>
-            <td>10%</td>
-        </tr>
-    </table>
-<br><br>
-<div class="row">
-    <div class="col">
-    <img src="../image/resistorCal.webp" alt="">
+                    <td>ត្នោត/brown</td>
+                    <td style="background-color: rgb(87, 53, 53);"></td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>x10</td>
+                    <td>1%</td>
+                </tr>
+                <tr>
+                    <td>ក្រហម/red</td>
+                    <td style="background-color: rgb(255, 0, 0);"></td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>x100</td>
+                    <td>2%</td>
+                </tr>
+                <tr>
+                    <td>ទឹកក្រូច/orange</td>
+                    <td style="background-color: rgb(255, 162, 0);"></td>
+                    <td>3</td>
+                    <td>3</td>
+                    <td>x1k</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>លឿង/yellow</td>
+                    <td style="background-color: rgb(248, 255, 43);"></td>
+                    <td>4</td>
+                    <td>4</td>
+                    <td>x10k</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>បៃតង/green</td>
+                    <td style="background-color: rgb(21, 255, 0);"></td>
+                    <td>5</td>
+                    <td>5</td>
+                    <td>x100k</td>
+                    <td>0.5%</td>
+                </tr>
+                <tr>
+                    <td>ខៀវ/blue</td>
+                    <td style="background-color: rgb(17, 0, 255);"></td>
+                    <td>6</td>
+                    <td>6</td>
+                    <td>x1M</td>
+                    <td>0.25%</td>
+                </tr>
+                <tr>
+                    <td>Violet</td>
+                    <td style="background-color:violet"></td>
+                    <td>7</td>
+                    <td>7</td>
+                    <td>x10M</td>
+                    <td>0.10%</td>
+                </tr>
+                <tr>
+                    <td>ប្រផេះ/grey</td>
+                    <td style="background-color:gray;"></td>
+                    <td>8</td>
+                    <td>8</td>
+                    <td>x100M</td>
+                    <td>0.05%</td>
+                </tr>
+                <tr>
+                    <td>ស/White</td>
+                    <td style="background-color: rgb(255, 255, 255);"></td>
+                    <td>9</td>
+                    <td>9</td>
+                    <td>x1G</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>មាស/Gold</td>
+                    <td style="background-color:gold;"></td>
+                    <td></td>
+                    <td></td>
+                    <td>x0.1</td>
+                    <td>5%</td>
+                </tr>
+                <tr>
+                    <td>ប្រាក់/Silver</td>
+                    <td style="background-color: silver;"></td>
+                    <td></td>
+                    <td></td>
+                    <td>x0.01</td>
+                    <td>10%</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="col">
-        <h4>តាមរូបយើងមានរេសុីស្តង់ដែលមាន​៤ពណ័ ដែលពណ័ទី១និងទី២ជាតួរលេខ និង​ទី៣ជាមេគុណ ហើយទី៤ជាកម្រិត</h4>
+
+    <!-- Calculation / Footer Guide Section -->
+    <div class="row align-items-center my-5">
+        <div class="col-md-6 text-center mb-3 mb-md-0">
+            <img src="../image/resistorCal.webp" alt="Resistor Calculation Guide" class="img-fluid rounded shadow-sm">
+        </div>
+        <div class="col-md-6">
+            <div class="p-3 bg-light rounded border">
+                <h4 style="line-height: 1.6; font-size: 1.25rem;">
+                    តាមរូបយើងមានរេសុីស្តង់ដែលមាន ៤ ពណ៌ ដែលពណ៌ទី១ និងទី២ ជាតួរលេខ និងទី៣ ជាមេគុណ ហើយទី៤ ជាកម្រិតលំអៀង។
+                </h4>
+            </div>
+        </div>
     </div>
 </div>
+
 </body>
 </html>
