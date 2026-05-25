@@ -90,13 +90,7 @@ initSidebarState();
 
 // Data routing links Top Dropdown Menu items to Sidebar lists and local HTML target paths
 const menuData = {
-    "consumer": {
-        title: "Project",
-        items: [
-            { name: "s", url: "kk.html" },
 
-        ]
-    },
     "components": {
         title: "Circuit Components",
         items: [
@@ -112,7 +106,13 @@ const menuData = {
             { name: "សៀវភៅរូបមន្ត", url: "fr\\formulaBook\\formulaBook.html" },
             { name: "កម្រិតទឹក", url: "fr\\formulaBook\\waterlevel.html" },
         ]
-    }
+    },
+    "home": {
+    title: "Home",
+    items: [
+        { name: "Home Page", url: "home.html" }
+    ]
+},
 };
 
 // DOM Elements
