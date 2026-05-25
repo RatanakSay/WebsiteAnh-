@@ -101,6 +101,7 @@ const menuData = {
         title: "Circuit Components",
         items: [
             { name: "Resistor/រេសុីស្តង់", url: "componet\\Resistor.html" },
+            { name: "Esp32C3 supermini", url: "componet\\esp32\\esp32c3supermini.html" },
             
 
         ]
