@@ -2,205 +2,333 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../bootstrap-4.0.0-dist/css/bootstrap.min.css">
-    <title>Document</title>
- <style>
-    .title{
-        border: 2px black solid;
-    }
-    .i{
-        border: 3px black solid;
-    }
-        .d{
-        border: 3px black solid;
-    }
-    .name{
-        text-align: center;
-        font-family: 'Times New Roman', Times, serif;
-        border: 3px rgb(23, 154, 219) solid;
-        
-    }
-.parent{
-    display: flex;
-    flex-direction: column; /* ADD THIS */
-    justify-content: center;
-    align-items: center;
-}
-table, th, td {
-  border:3px solid black;
-  padding: 5px 5px 5px 5px;
-  font-size: 25px;
+    <title>Formula Book Project</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-surface: #131a26;
+            --bg-card: #1c2638;
+            --accent: #00f0ff;
+            --accent-glow: rgba(0, 240, 255, 0.15);
+            --text-primary: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.06);
+            --font-stack: 'Plus Jakarta Sans', system-ui, sans-serif;
+        }
 
-}
-th{
-    background-color: rgb(69, 165, 0);
-    color: white;
-}
-.t1{
-    background-color: rgb(227, 228, 226);
-    color: rgb(0, 0, 0);
-}
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: var(--font-stack);
+            padding: 30px 24px;
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+        }
 
- </style>
+        /* Section Headings */
+        .project-banner {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), transparent);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 35px;
+        }
+
+        .project-banner h1 {
+            font-size: 24px;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 40px 0 20px 0;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Intro Layout Block */
+        .intro-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .intro-text p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .intro-text .khmer-text {
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+
+        .main-project-img {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 12px;
+            width: 100%;
+            height: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .main-project-img:hover {
+            transform: scale(1.02);
+            border-color: var(--accent);
+        }
+
+        /* Component Grid Cards */
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 16px;
+        }
+
+        .component-card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.25s ease;
+        }
+
+        .component-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 8px 20px var(--accent-glow);
+        }
+
+        .component-card img {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+        }
+
+        .component-card .name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* Centered Diagram Asset */
+        .diagram-container {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .diagram-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+        }
+
+        /* Sleek Tech Layout Pin Table */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 20px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: rgba(255, 255, 255, 0.02);
+            color: var(--accent);
+            font-weight: 600;
+            padding: 14px 20px;
+            border-bottom: 2px solid var(--border-color);
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-section-divider {
+            background-color: rgba(0, 240, 255, 0.03) !important;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Embedded code frame panel wrapper */
+        .code-frame-container {
+            margin-top: 40px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .code-frame-container iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            display: block;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 768px) {
+            .intro-grid {
+                grid-template-columns: 1fr;
+            }
+            .main-project-img {
+                max-width: 300px;
+                margin: 0 auto;
+            }
+        }
+    </style>
 </head>
-<body><br>
- <div class="bg-primary title">
-    <h4 class="text-light">សៀវភៅរូបមន្ត / Forumula book</h4>
- </div>
- 
- <div>
-    <p style="font-size: 25px;">១.តើអ្វីទៅជាសៀភៅររូបមន្ត?</p>
-    <div class="row">
-        <div class="col">
-            <p style="font-size: 15px;">សៀវភៅរូបមន្តឬ formula book គឺជាឧបករណ៍មួយដែល display ដែលអាចបញ្ចេញរូបមន្តជាច្រើនតាមតែក្បាលយើងដាក់ក្នុង code</p>
-            <p style="font-size: 15px;">formula book is the display that can show any fucking formula that you put in the code it ez to cheat in exam much easier than phone.</p>
-        </div>
-        <div class="col">
-            <img class="i" src="../../image\formulabook.png" alt="" width="300px" height="310px">
-        </div>
-        <br>
-   
+<body>
+
+    <div class="project-banner">
+        <h1>សៀវភៅរូបមន្ត / Formula Book Dashboard</h1>
     </div>
-     <p style="font-size: 25px;">២.ឧបករណ៍ត្រូវការ</p>
-     <div class="row">
-        <div class="col d" >
-            <img src="../../image\button.png" alt="" width="130px" height="140px">
+ 
+    <div class="section-title">
+        <i class="fas fa-question-circle"></i> ១. តើអ្វីទៅជាសៀវភៅរូបមន្ត?
+    </div>
+    
+    <div class="intro-grid">
+        <div class="intro-text">
+            <p class="khmer-text">សៀវភៅរូបមន្ត ឬ formula book គឺជាឧបករណ៍មួយដែល display ដែលអាចបញ្ចេញរូបមន្តជាច្រើនតាមតែក្បាលយើងដាក់ក្នុង code</p>
+            <p>Formula book is a hardware display setup that renders specific targeted math/physics equations compiled straight via firmware onto a small screen interface module.</p>
+        </div>
+        <div>
+            <img class="main-project-img" src="../../image/formulabook.png" alt="Formula Book Project Minimal Setup Image">
+        </div>
+    </div>
+
+    <div class="section-title">
+        <i class="fas fa-tools"></i> ២. ឧបករណ៍ដែលត្រូវការ / Requirements
+    </div>
+    
+    <div class="components-grid">
+        <div class="component-card">
+            <img src="../../image/button.png" alt="Hardware Button Component Module">
             <p class="name">Button ចំនួន​ ៥</p>
         </div>
-        <div class="col d">
-            <img src="../../image\swicth.png" alt=""width="130px" height="140px">
-            <p class="name">swicth ចំនួន​ ២</p>
+        <div class="component-card">
+            <img src="../../image/swicth.png" alt="Hardware Toggle Switch Component Module">
+            <p class="name">Switch ចំនួន​ ២</p>
         </div>
-                <div class="col d">
-            <img src="../../image\bat.png" alt=""width="130px" height="140px">
-            <p class="name">ថ្មរចំនួន១ 3.3v</p>
+        <div class="component-card">
+            <img src="../../image/bat.png" alt="Lithium Battery Cells Module">
+            <p class="name">ថ្មចំនួន ១ (3.3V)</p>
         </div>
-                <div class="col d">
-            <img src="../../image\rgb.png" alt=""width="130px" height="140px">
-            <p  class="name">rgb display ចំនួន​ ១</p>
+        <div class="component-card">
+            <img src="../../image/rgb.png" alt="RGB Display Screen Module">
+            <p class="name">RGB Display ចំនួន​ ១</p>
         </div>
-     </div>
- </div>
- <div class="row">
-    <div class="col d">
-        <img src="../../image\esp32c3supermini.png" alt=""width="130px" height="140px">
-        <p  class="name">esp32 mini</p>
+        <div class="component-card">
+            <img src="../../image/esp32c3supermini.png" alt="ESP32-C3 Supermini MCU Core Development Board">
+            <p class="name">ESP32 Mini Dev Board</p>
+        </div>
+        <div class="component-card">
+            <img src="../../image/batteryHolder.png" alt="Battery Cradle Cell Holder Unit">
+            <p class="name">Battery Holder</p>
+        </div>
+        <div class="component-card">
+            <img src="../../image/buzzer.png" alt="Audio Piezo Output Buzzer Element">
+            <p class="name">Buzzer Alert Module</p>
+        </div>
+        <div class="component-card">
+            <img src="../../image/pcb.png" alt="Prototyping Perf-Board PCB Component Matrix">
+            <p class="name">PCB Breadboard Card</p>
+        </div>
     </div>
-    <div class="col d">
-        <img src="../../image\batteryHolder.png" alt=""width="130px" height="140px">
-        <p  class="name">battery holder</p>
+
+    <div class="section-title">
+        <i class="fas fa-project-diagram"></i> ៣. Schematic Diagram
     </div>
-    <div class="col d">
-        <img src="../../image\buzzer.png" alt=""width="130px" height="140px">
-        <p  class="name">buzzer</p>
+    <div class="diagram-container">
+        <img src="../../image/formuladigram.png" alt="Complete Circuit Interconnect Diagram Details Schematic">
     </div>
-    <div class="col d">
-         <img src="../../image\pcb.png" alt=""width="130px" height="140px">
-        <p  class="name">pcb board</p>
+
+    <div class="section-title">
+        <i class="fas fa-network-wired"></i> ៤. Hardware Pin Mapping Table
     </div>
- </div>
- <br><p style="font-size: 25px;">3.Diagram</p> <br>
- <div class=" parent ">
-     
-     <img src="../../image\formuladigram.png" alt="">
- </div><br><br><br><br><br><br><br>
- <div class="parent" style="text-align: center;">
- <table style="width: 80%;">
-    <tr>
-        <th>Rgb display</th>
-        <th>Esp32 supermini</th>
     
-    </tr>
-    <tr>
-        <td class="t1">Gnd</td>
-        <td class="t1">Gnd</td>
-    </tr>
-    <tr>
-        <td class="t2">Vcc</td>
-        <td class="t2">3.3V</td>
-    </tr>
-    <tr>
-        <td class="t1">SCK</td>
-        <td class="t1">4</td>
-    </tr>
-    <tr>
-        <td class="t2">SDA</td>
-        <td class="t2">3</td>
-    </tr>
-    <tr>
-        <td class="t1">RES</td>
-        <td class="t1">0</td>
-    </tr>
-    <tr>
-        <td class="t2">Rs</td>
-        <td class="t2">2</td>
-    </tr>
-    <tr>
-        <td class="t1">Cs</td>
-        <td class="t1">10</td>
-    </tr>
-    <tr>
-        <td class="t2">Blk ឬ LED</td>
-        <td class="t2">3.3v</td>
-    </tr>
-     <tr>
-        <th>Button</th>
-        <th>Esp32 supermini</th>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Peripheral Module Pin</th>
+                    <th>ESP32-C3 Supermini Target Pin</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-section-divider"><td colspan="2"><i class="fas fa-tv"></i> RGB DISPLAY BUS MAP</td></tr>
+                <tr><td>GND</td><td>GND</td></tr>
+                <tr><td>VCC</td><td>3.3V</td></tr>
+                <tr><td>SCK</td><td>4</td></tr>
+                <tr><td>SDA</td><td>3</td></tr>
+                <tr><td>RES</td><td>0</td></tr>
+                <tr><td>RS</td><td>2</td></tr>
+                <tr><td>CS</td><td>10</td></tr>
+                <tr><td>BLK / LED</td><td>3.3V</td></tr>
+                
+                <tr class="table-section-divider"><td colspan="2"><i class="fas fa-gamepad"></i> CONTROL BUTTON KEYPAD MATRIX</td></tr>
+                <tr><td>Left Button</td><td>5</td></tr>
+                <tr><td>Right Button</td><td>6</td></tr>
+                <tr><td>Top Button</td><td>7</td></tr>
+                <tr><td>Down Button</td><td>20</td></tr>
+                <tr><td>Exit Button</td><td>21</td></tr>
+                <tr><td>GND (Common Ground Terminal)</td><td>GND</td></tr>
+                
+                <tr class="table-section-divider"><td colspan="2"><i class="fas fa-volume-up"></i> SYSTEM AUDIO ALARM UNIT</td></tr>
+                <tr><td>Buzzer (+) Anode</td><td>8</td></tr>
+                <tr><td>Buzzer (-) Cathode Base Ground</td><td>GND</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section-title">
+        <i class="fas fa-code"></i> ៥. Project Firmware Logic Script Source
+    </div>
     
-    </tr>
-    <tr>
-        <td class="t1">left</td>
-        <td class="t1">5</td>
-    </tr>
-    <tr>
-        <td class="t2">Right</td>
-        <td class="t2">6</td>
-    </tr>
-    <tr>
-        <td class="t1">Top</td>
-        <td class="t1">7</td>
-    </tr>
-    <tr>
-        <td class="t2">Down</td>
-        <td class="t2">20</td>
-    </tr>
-    <tr>
-        <td class="t1">Exit</td>
-        <td class="t1">21</td>
-    </tr>
-    <tr>
-        <td class="t2">Gnd ទាំងអស់</td>
-        <td class="t2">Gnd</td>
-    </tr>
-    <tr>
-       <th>Buzzer</th>
-       <th>esp32c3supermini</th>
-    </tr>
-    <tr>
-        <td class="t2">(+)</td>
-        <td class="t2">8</td>
-    </tr>
-        <tr>
-        <td class="t1">(-)</td>
-        <td class="t1">Gnd</td>
-    </tr>
- </table><br>
+    <div class="code-frame-container">
+        <iframe src="arduino_code_display.html" title="Embedded Project Firmware Code Blocks View Frame Source"></iframe>
+    </div>
 
-<br><br>
-
-<div class="code1">
-  <iframe
-    id="content-frame"
-    name="content-frame"
-    src="arduino_code_display.html"
-    frameborder="0"
-    width="1000px"
-    height="700px">
-  </iframe>
-</div>
-
-</div>
 </body>
 </html>
