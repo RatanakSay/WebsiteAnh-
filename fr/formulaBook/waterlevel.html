@@ -3,41 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="../../bootstrap-4.0.0-dist/css/bootstrap.min.css">
+    <title>Water Level Sensor Project</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        .title{
+        :root {
+            --bg-main: #0b0f19;
+            --bg-surface: #131a26;
+            --accent: #00f0ff;
+            --accent-glow: rgba(0, 240, 255, 0.15);
+            --text-primary: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.06);
+            --font-stack: 'Plus Jakarta Sans', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: var(--font-stack);
+            padding: 30px 24px;
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .project-banner {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), transparent);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 35px;
+        }
+
+        .project-banner h1 {
+            font-size: 24px;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 40px 0 20px 0;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Grid Component Cards System */
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 16px;
+        }
+
+        .component-card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px 15px;
             text-align: center;
-            border: 3px black solid;
+            transition: all 0.25s ease;
+        }
+
+        .component-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 8px 20px var(--accent-glow);
+        }
+
+        .component-card img {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+        }
+
+        .component-card .name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        /* Diagram Component Layout Panel Container Base */
+        .diagram-container {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .diagram-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
         }
     </style>
 </head>
 <body>
-   <br>
-    <h4 class="bg-secondary title" style="color: white;">ឧបករណ៍វាស់កម្រិតទឹក</h4>
-    <div>
-        <h4 style="font-family: 'Times New Roman', Times, serif;">១.គ្រឿងដែលត្រូវការ / Requirment</h4>
-    </div><br>
-    <div class="row">
-        <div class="col d">
-             <img src="../../image\transistor.png" alt="" width="130px" height="140px">
-            <p class="name">Transistor Bc547</p>
+
+    <div class="project-banner">
+        <h1>ឧបករណ៍វាស់កម្រិតទឹក / Liquid Water Level Indicator</h1>
+    </div>
+
+    <div class="section-title">
+        <i class="fas fa-boxes"></i> ១. គ្រឿងដែលត្រូវការ / Bill of Materials Requirements
+    </div>
+    
+    <div class="components-grid">
+        <div class="component-card">
+            <img src="../../image/transistor.png" alt="NPN Bipolar Junction Transistor Module BC547 Pack Component">
+            <p class="name">Transistor BC547</p>
         </div>
-        <div class="col d">
-            <img src="../../image\led.png" alt="" width="130px" height="140px">
-            <p class="name">led</p>
+        <div class="component-card">
+            <img src="../../image/led.png" alt="Light Emitting Diode Indicators Component Module Unit">
+            <p class="name">LED Light Core</p>
         </div>
-        <div class="col d">
-             <img src="../../image\resistor.png" alt="" width="130px" height="140px">
-            <p class="name" >resistor 330 ohm</p>
+        <div class="component-card">
+            <img src="../../image/resistor.png" alt="Through Hole Fixed Carbon Film Resistor 330 Ohm Element Pack">
+            <p class="name">Resistor 330 Ohm</p>
         </div>
-        <div class="col d">
-             <img src="../../image\battery.png" alt="" width="130px" height="140px">
-            <p class="name" >battery 9v</p>
+        <div class="component-card">
+            <img src="../../image/battery.png" alt="Direct Current 9V Alkaline Power Source Supply Battery Pack">
+            <p class="name">Battery 9V Supply</p>
         </div>
-    </div><br>
-    <h4 >២.Diagram</h4>
-    <img src="../../image\waterlevel.png" alt="">
+    </div>
+
+    <div class="section-title">
+        <i class="fas fa-project-diagram"></i> ២. System Blueprint Schematic Diagram
+    </div>
+    
+    <div class="diagram-container">
+        <img src="../../image/waterlevel.png" alt="Complete Liquid Transistor Sensor Diagram Blueprint Layout Matrix Details">
+    </div>
 
 </body>
 </html>
