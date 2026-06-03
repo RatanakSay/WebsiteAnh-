@@ -8,13 +8,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-main: #0b0f19;
-            --bg-surface: #131a26;
-            --accent: #00f0ff;
-            --accent-glow: rgba(0, 240, 255, 0.15);
-            --text-primary: #f1f5f9;
-            --text-muted: #94a3b8;
-            --border-color: rgba(255, 255, 255, 0.06);
+            --bg-main: #f4f6fa;
+            --bg-surface: #ffffff;
+            --accent: #0066ff;
+            --accent-glow: rgba(0, 102, 255, 0.08);
+            --text-primary: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
             --font-stack: 'Plus Jakarta Sans', system-ui, sans-serif;
         }
 
@@ -29,12 +29,13 @@
 
         /* Banner Header Style */
         .project-banner {
-            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), transparent);
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.06), transparent);
             border: 1px solid var(--border-color);
             border-left: 4px solid var(--accent);
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 35px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.01);
         }
 
         .project-banner h1 {
@@ -64,6 +65,7 @@
             border: 1px solid var(--border-color);
             padding: 24px;
             border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(15,23,42,0.02);
         }
 
         .img-container {
@@ -75,7 +77,7 @@
             height: auto;
             border-radius: 8px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 25px rgba(15,23,42,0.04);
         }
 
         .img-container .label {
@@ -111,7 +113,7 @@
             background: var(--bg-surface);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 25px rgba(15,23,42,0.03);
         }
 
         table {
@@ -122,7 +124,7 @@
         }
 
         th {
-            background-color: rgba(255, 255, 255, 0.02);
+            background-color: #f8fafc;
             color: var(--accent);
             font-weight: 600;
             padding: 16px;
@@ -144,7 +146,7 @@
         }
 
         tr:hover td {
-            background-color: rgba(255, 255, 255, 0.01);
+            background-color: var(--bg-main);
         }
 
         /* Color Pill Previews Inside Cells */
@@ -154,8 +156,8 @@
             height: 20px;
             border-radius: 4px;
             vertical-align: middle;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            border: 1px solid rgba(15, 23, 42, 0.15);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
         }
 
         /* Calculation Guide Section Layout */
@@ -174,6 +176,7 @@
             border-radius: 12px;
             display: flex;
             justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.01);
         }
 
         .calc-img-box img {
@@ -183,11 +186,11 @@
         }
 
         .calc-info-box {
-            background: rgba(0, 240, 255, 0.02);
-            border: 1px solid rgba(0, 240, 255, 0.15);
+            background: rgba(0, 102, 255, 0.02);
+            border: 1px solid rgba(0, 102, 255, 0.12);
             padding: 24px;
             border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0, 102, 255, 0.02);
         }
 
         .calc-info-box h4 {
@@ -221,7 +224,7 @@
             <div class="label">Hardware Resistor</div>
         </div>
         <div class="info-text">
-            <p class="khmer-desc">រេសុីស្តង់គឺជាគ្រឿងអេឡិចត្រូនិចមួយដែលមាននាទីគ្រប់គ្រង់ចរន្តអគ្គិសនីដូចជាកាត់បន្ថយចរន្តនិងការពារសៀគ្វីផ្សេងៗកុំឲឆេះ។</p>
+            <p class="khmer-desc">រេសុីស្តង់គឺជាគ្រឿងអេឡិចត្រូនិចមួយដែលមាននាទីគ្រប់គ្រង់ចរន្តអគ្គិសនីដូចជាកាត់បន្ថយចរន្តនិងការពារសៀគ្វីផ្សេងៗកុំឲឆេះ。</p>
             <p class="english-desc">A resistor is a fundamental electronic component designed to introduce specified electrical resistance into a circuit, effectively limiting electrical current flow and protecting sensitive sub-modules from power surges.</p>
         </div>
     </div>
@@ -295,12 +298,12 @@
                 </tr>
                 <tr>
                     <td>មាស / Gold</td>
-                    <td><span class="color-badge" style="background-color: #fbc02d; box-shadow: 0 0 8px rgba(251,192,45,0.4);"></span></td>
+                    <td><span class="color-badge" style="background-color: #fbc02d; box-shadow: 0 2px 4px rgba(0,0,0,0.15);"></span></td>
                     <td>-</td><td>-</td><td>x0.1</td><td>5%</td>
                 </tr>
                 <tr>
                     <td>ប្រាក់ / Silver</td>
-                    <td><span class="color-badge" style="background-color: #b0bec5; box-shadow: 0 0 8px rgba(176,190,197,0.4);"></span></td>
+                    <td><span class="color-badge" style="background-color: #b0bec5; box-shadow: 0 2px 4px rgba(0,0,0,0.15);"></span></td>
                     <td>-</td><td>-</td><td>x0.01</td><td>10%</td>
                 </tr>
             </tbody>
