@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-main: #0b0f19;
-            --bg-surface: #131a26;
-            --accent: #00f0ff;
-            --text-primary: #f1f5f9;
-            --text-muted: #94a3b8;
-            --border-color: rgba(255, 255, 255, 0.06);
+            --bg-main: #f4f6fa;
+            --bg-surface: #ffffff;
+            --accent: #0066ff;
+            --text-primary: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
         }
 
         * {
@@ -41,8 +41,38 @@
             background-image: linear-gradient(var(--border-color) 1px, transparent 1px),
                               linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
             background-size: 40px 40px;
-            opacity: 0.4;
+            opacity: 0.6;
             z-index: 1;
+        }
+
+        /* Light Theme Dynamic Action Button */
+        .btn-dark-blue.glow {
+            background-color: #ffffff;
+            color: var(--accent);
+            border: 2px solid var(--border-color);
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 102, 255, 0.05);
+        }
+
+        /* Hover Effect */
+        .btn-dark-blue.glow:hover {
+            background-color: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent);
+            box-shadow: 0 6px 20px rgba(0, 102, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Click Effect */
+        .btn-dark-blue.glow:active {
+            transform: translateY(1px);
         }
 
         .welcome-container {
@@ -51,7 +81,7 @@
             padding: 60px 40px;
             border-radius: 16px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 10px 40px rgba(15, 23, 42, 0.04);
             max-width: 600px;
             position: relative;
             z-index: 10;
@@ -67,7 +97,7 @@
             font-size: 50px;
             color: var(--accent);
             margin-bottom: 24px;
-            text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+            filter: drop-shadow(0 4px 10px rgba(0, 102, 255, 0.15));
             display: inline-block;
         }
 
@@ -81,7 +111,6 @@
 
         .welcome-title .highlight {
             color: var(--accent);
-            text-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
         }
 
         .welcome-subtitle {
@@ -110,7 +139,7 @@
         }
 
         .feature-badge {
-            background: rgba(255, 255, 255, 0.03);
+            background: #f8fafc;
             border: 1px solid var(--border-color);
             padding: 12px 20px;
             border-radius: 10px;
@@ -128,7 +157,7 @@
         }
 
         .feature-badge:hover {
-            background: rgba(0, 240, 255, 0.05);
+            background: rgba(0, 102, 255, 0.05);
             border-color: var(--accent);
             transform: translateY(-2px);
         }
@@ -160,10 +189,8 @@
         </p>
         
         <p class="welcome-message">
-            Select an operational category from the menu navigation above to deploy circuit data, explore hardware architecture pins, or track custom telemetry script projects.
+            <button class="btn-dark-blue glow">Random</button>
         </p>
-
-
     </div>
 
 </body>
