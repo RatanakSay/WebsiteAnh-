@@ -3,147 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Water Level Sensor Project</title>
+    <title>Home - NakHeng Electronic</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-main: #0b0f19;
-            --bg-surface: #131a26;
-            --accent: #00f0ff;
-            --accent-glow: rgba(0, 240, 255, 0.15);
-            --text-primary: #f1f5f9;
-            --text-muted: #94a3b8;
-            --border-color: rgba(255, 255, 255, 0.06);
-            --font-stack: 'Plus Jakarta Sans', system-ui, sans-serif;
+            --bg-main: #f4f6fa;
+            --bg-surface: #ffffff;
+            --accent: #0066ff;
+            --text-primary: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
         }
 
         body {
             background-color: var(--bg-main);
             color: var(--text-primary);
-            font-family: var(--font-stack);
-            padding: 30px 24px;
-            margin: 0;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .project-banner {
-            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), transparent);
-            border: 1px solid var(--border-color);
-            border-left: 4px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
             padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 35px;
+            overflow: hidden;
+            position: relative;
         }
 
-        .project-banner h1 {
-            font-size: 24px;
-            margin: 0;
+        /* Ambient subtle grid pattern back-layer */
+        .grid-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(var(--border-color) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.6;
+            z-index: 1;
+        }
+
+        /* Light Theme Dynamic Action Button */
+        .btn-dark-blue.glow {
+            background-color: #ffffff;
+            color: var(--accent);
+            border: 2px solid var(--border-color);
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 102, 255, 0.05);
+        }
+
+        /* Hover Effect */
+        .btn-dark-blue.glow:hover {
+            background-color: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent);
+            box-shadow: 0 6px 20px rgba(0, 102, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Click Effect */
+        .btn-dark-blue.glow:active {
+            transform: translateY(1px);
+        }
+
+        .welcome-container {
+            text-align: center;
+            background: var(--bg-surface);
+            padding: 60px 40px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 40px rgba(15, 23, 42, 0.04);
+            max-width: 600px;
+            position: relative;
+            z-index: 10;
+            animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .icon-top {
+            font-size: 50px;
+            color: var(--accent);
+            margin-bottom: 24px;
+            filter: drop-shadow(0 4px 10px rgba(0, 102, 255, 0.15));
+            display: inline-block;
+        }
+
+        .welcome-title {
+            font-size: 40px;
+            color: var(--text-primary);
+            margin-bottom: 12px;
             font-weight: 700;
             letter-spacing: -0.5px;
         }
 
-        .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin: 40px 0 20px 0;
+        .welcome-title .highlight {
             color: var(--accent);
+        }
+
+        .welcome-subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .welcome-message {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 35px;
+        }
+
+        .feature-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .feature-badge {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            padding: 12px 20px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-
-        /* Grid Component Cards System */
-        .components-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 16px;
-        }
-
-        .component-card {
-            background-color: var(--bg-surface);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px 15px;
-            text-align: center;
-            transition: all 0.25s ease;
-        }
-
-        .component-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent);
-            box-shadow: 0 8px 20px var(--accent-glow);
-        }
-
-        .component-card img {
-            width: 90px;
-            height: 90px;
-            object-fit: contain;
-            margin-bottom: 12px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
-        }
-
-        .component-card .name {
             font-size: 14px;
             font-weight: 600;
             color: var(--text-primary);
-            margin: 0;
+            transition: all 0.25s ease;
         }
 
-        /* Diagram Component Layout Panel Container Base */
-        .diagram-container {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-color);
-            padding: 25px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        .feature-badge i {
+            color: var(--accent);
         }
 
-        .diagram-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 6px;
+        .feature-badge:hover {
+            background: rgba(0, 102, 255, 0.05);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 600px) {
+            .welcome-title { font-size: 32px; }
+            .welcome-container { padding: 40px 20px; }
+            .feature-row { flex-direction: column; }
         }
     </style>
 </head>
 <body>
 
-    <div class="project-banner">
-        <h1>ឧបករណ៍វាស់កម្រិតទឹក / Liquid Water Level Indicator</h1>
-    </div>
+    <div class="grid-bg"></div>
 
-    <div class="section-title">
-        <i class="fas fa-boxes"></i> ១. គ្រឿងដែលត្រូវការ / Bill of Materials Requirements
-    </div>
-    
-    <div class="components-grid">
-        <div class="component-card">
-            <img src="../../image/transistor.png" alt="NPN Bipolar Junction Transistor Module BC547 Pack Component">
-            <p class="name">Transistor BC547</p>
+    <div class="welcome-container">
+        <div class="icon-top">
+            <i class="fas fa-charging-station"></i>
         </div>
-        <div class="component-card">
-            <img src="../../image/led.png" alt="Light Emitting Diode Indicators Component Module Unit">
-            <p class="name">LED Light Core</p>
-        </div>
-        <div class="component-card">
-            <img src="../../image/resistor.png" alt="Through Hole Fixed Carbon Film Resistor 330 Ohm Element Pack">
-            <p class="name">Resistor 330 Ohm</p>
-        </div>
-        <div class="component-card">
-            <img src="../../image/battery.png" alt="Direct Current 9V Alkaline Power Source Supply Battery Pack">
-            <p class="name">Battery 9V Supply</p>
-        </div>
-    </div>
-
-    <div class="section-title">
-        <i class="fas fa-project-diagram"></i> ២. System Blueprint Schematic Diagram
-    </div>
-    
-    <div class="diagram-container">
-        <img src="../../image/waterlevel.png" alt="Complete Liquid Transistor Sensor Diagram Blueprint Layout Matrix Details">
+        
+        <h1 class="welcome-title">
+            Welcome to <span class="highlight">NakHeng</span>
+        </h1>
+        
+        <p class="welcome-subtitle">
+            <i class="fas fa-bolt text-accent"></i> 
+            Electronic Learning Workspace
+            <i class="fas fa-lightbulb text-accent"></i>
+        </p>
+        
+        <p class="welcome-message">
+            <button class="btn-dark-blue glow">Random</button>
+        </p>
     </div>
 
 </body>
