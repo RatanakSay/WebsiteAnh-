@@ -58,12 +58,6 @@ sidebarOverlay.addEventListener('click', function() {
     }
 });
 
-sidebar.addEventListener('click', function(e) {
-    if (isMobile() && e.target.tagName === 'A') {
-        toggleSidebar();
-    }
-});
-
 let resizeTimer;
 window.addEventListener('resize', function() {
     clearTimeout(resizeTimer);
@@ -75,76 +69,51 @@ window.addEventListener('resize', function() {
 initSidebarState();
 
 // ====================================
-// MENU DATA & CONTENT MANAGEMENT
+// SIDEBAR HIGHLIGHT AUTOMATION
 // ====================================
-const menuData = {
-    "components": {
-        title: "Circuit Components",
-        items: [
-            { name: "Resistor / រេសុីស្តង់", url: "componet\\Resistor.html" },
-            { name: "ESP32-C3 Supermini", url: "componet\\esp32\\esp32c3supermini.html" }
-        ]
-    },
-    "smart-home": {
-        title: "Project Files",
-        items: [
-            { name: "សៀវភៅរូបមន្ត (Formula Book)", url: "fr\\formulaBook\\formulaBook.html" },
-            { name: "កម្រិតទឹក (Water Level)", url: "fr\\formulaBook\\waterlevel.html" }
-        ]
-    },
-    "home": {
-        title: "Overview",
-        items: [
-            { name: "Home Dashboard", url: "home.html" }
-        ]
+function highlightActiveSidebar() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentTopic = urlParams.get('topic') || 'home';
+    let currentPage = urlParams.get('page');
+
+    // Sync up with the active defaults setup in PHP index router
+    if (!currentPage) {
+        if (currentTopic === 'components') currentPage = 'resistor';
+        else if (currentTopic === 'smart-home') currentPage = 'formula';
+        else currentPage = 'home_dash';
     }
-};
 
-const dropdownMenu = document.getElementById('topicDropdown');
-const sidebarTitle = document.getElementById('sidebar-title');
-const sidebarMenu = document.getElementById('sidebar-menu');
-const contentFrame = document.getElementById('content-frame');
-
-function updateMenu(categoryKey) {
-    const data = menuData[categoryKey];
-    
-    if (data) {
-        sidebarTitle.textContent = data.title;
-        sidebarMenu.innerHTML = '';
-        
-        data.items.forEach((item, index) => {
-            const li = document.createElement('li');
-            const a = document.createElement('a');
-            a.href = item.url;
-            a.textContent = item.name;
-            a.target = "content-frame";
-            
-            if(index === 0) {
-                a.classList.add('active');
-                contentFrame.src = item.url;
-            }
-
-            a.addEventListener('click', () => {
-                document.querySelectorAll('#sidebar-menu a').forEach(link => link.classList.remove('active'));
-                a.classList.add('active');
-            });
-
-            li.appendChild(a);
-            sidebarMenu.appendChild(li);
-        });
-    }
+    // Inspect list items inside sidebar navigation and flag active states
+    const links = document.querySelectorAll('#sidebar-menu a');
+    links.forEach(a => {
+        const href = a.getAttribute('href') || '';
+        const queryString = href.split('?')[1] || '';
+        const linkUrl = new URLSearchParams(queryString);
+        if (linkUrl.get('page') === currentPage) {
+            a.classList.add('active');
+        } else {
+            a.classList.remove('active');
+        }
+    });
 }
 
-dropdownMenu.addEventListener('click', (e) => {
-    const targetLink = e.target.closest('a');
-    if (targetLink) {
-        e.preventDefault();
-        const selectedTopic = targetLink.getAttribute('data-topic');
-        updateMenu(selectedTopic);
-    }
-});
+document.addEventListener('DOMContentLoaded', highlightActiveSidebar);
 
-// Fixed initialization sequence to hook into 'home' default routes
-document.addEventListener('DOMContentLoaded', () => {
-    updateMenu('home');
+// ====================================
+// THEME TOGGLE (DARK / LIGHT MODE)
+// ====================================
+const themeToggle = document.getElementById('themeToggle');
+
+function applyTheme(theme) {
+    if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+    }
+    localStorage.setItem('nakheng-theme', theme);
+}
+
+themeToggle.addEventListener('click', function() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    applyTheme(isDark ? 'light' : 'dark');
 });
