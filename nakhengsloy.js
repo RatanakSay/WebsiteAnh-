@@ -1,3 +1,11 @@
+// ====================================
+// SIDEBAR TOGGLE FUNCTIONALITY
+// ====================================
+const sidebarToggle = document.getElementById('sidebarToggle');
+const sidebar = document.getElementById('sidebar');
+const content = document.getElementById('content');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+
 let sidebarVisible = true;
 
 // Check if mobile
@@ -9,20 +17,30 @@ function isMobile() {
 function initSidebarState() {
     if (isMobile()) {
         sidebar.classList.add('hidden');
-@@ -28,12 +26,10 @@ function initSidebarState() {
+        sidebar.classList.remove('visible');
+        content.classList.add('expanded');
+        sidebarVisible = false;
+    } else {
+        sidebar.classList.remove('hidden');
+        sidebar.classList.remove('visible');
+        content.classList.remove('expanded');
+        sidebarVisible = true;
     }
 }
 
 // Toggle sidebar
 function toggleSidebar() {
     sidebarVisible = !sidebarVisible;
-
+    
     if (isMobile()) {
         // Mobile behavior
         if (sidebarVisible) {
             sidebar.classList.remove('hidden');
             sidebar.classList.add('visible');
-@@ -44,7 +40,6 @@ function toggleSidebar() {
+            sidebarOverlay.classList.add('active');
+        } else {
+            sidebar.classList.add('hidden');
+            sidebar.classList.remove('visible');
             sidebarOverlay.classList.remove('active');
         }
     } else {
@@ -30,7 +48,10 @@ function toggleSidebar() {
         if (sidebarVisible) {
             sidebar.classList.remove('hidden');
             content.classList.remove('expanded');
-@@ -55,24 +50,20 @@ function toggleSidebar() {
+        } else {
+            sidebar.classList.add('hidden');
+            content.classList.add('expanded');
+        }
     }
 }
 
@@ -55,7 +76,8 @@ sidebar.addEventListener('click', function(e) {
 let resizeTimer;
 window.addEventListener('resize', function() {
     clearTimeout(resizeTimer);
-@@ -81,72 +72,58 @@ window.addEventListener('resize', function() {
+    resizeTimer = setTimeout(function() {
+        initSidebarState();
     }, 250);
 });
 
@@ -76,18 +98,13 @@ const menuData = {
             { name: "Esp32C3 supermini", url: "componet\\esp32\\esp32c3supermini.html" },
             
 
-            { name: "Resistor / រេសុីស្តង់", url: "componet\\Resistor.html" },
-            { name: "ESP32-C3 Supermini", url: "componet\\esp32\\esp32c3supermini.html" }
         ]
     },
     "smart-home": {
         title: "project",
-        title: "Project Files",
         items: [
             { name: "សៀវភៅរូបមន្ត", url: "fr\\formulaBook\\formulaBook.html" },
             { name: "កម្រិតទឹក", url: "fr\\formulaBook\\waterlevel.html" },
-            { name: "សៀវភៅរូបមន្ត (Formula Book)", url: "fr\\formulaBook\\formulaBook.html" },
-            { name: "កម្រិតទឹក (Water Level)", url: "fr\\formulaBook\\waterlevel.html" }
         ]
     },
     "home": {
@@ -96,11 +113,6 @@ const menuData = {
         { name: "Home Page", url: "home.html" }
     ]
 },
-        title: "Overview",
-        items: [
-            { name: "Home Dashboard", url: "home.html" }
-        ]
-    }
 };
 
 // DOM Elements
@@ -112,14 +124,14 @@ const contentFrame = document.getElementById('content-frame');
 // Function to rebuild sidebar items and load corresponding iframe source page
 function updateMenu(categoryKey) {
     const data = menuData[categoryKey];
-
+    
     if (data) {
         // Update Sidebar Header Text
         sidebarTitle.textContent = data.title;
         
         // Clear previous sidebar elements
         sidebarMenu.innerHTML = '';
-
+        
         // Loop through items array and insert dynamic DOM list entries
         data.items.forEach((item, index) => {
             const li = document.createElement('li');
@@ -127,8 +139,7 @@ function updateMenu(categoryKey) {
             a.href = item.url;
             a.textContent = item.name;
             a.target = "content-frame"; // Explicit target mapping ensuring execution happens strictly within our frame block
-            a.target = "content-frame";
-
+            
             // Default select the first choice upon menu swapping
             if(index === 0) {
                 a.classList.add('active');
@@ -139,25 +150,24 @@ function updateMenu(categoryKey) {
             a.addEventListener('click', () => {
                 document.querySelectorAll('#sidebar-menu a').forEach(link => link.classList.remove('active'));
                 a.classList.add('active');
-@@ -158,16 +135,16 @@ function updateMenu(categoryKey) {
+            });
+
+            li.appendChild(a);
+            sidebarMenu.appendChild(li);
+        });
     }
 }
 
 // Global hook processing header drop-menu item clicks
 dropdownMenu.addEventListener('click', (e) => {
     if (e.target.tagName === 'A') {
-    const targetLink = e.target.closest('a');
-    if (targetLink) {
         e.preventDefault();
         const selectedTopic = e.target.getAttribute('data-topic');
-        const selectedTopic = targetLink.getAttribute('data-topic');
         updateMenu(selectedTopic);
     }
 });
 
 // Structural initialization sequence running directly on first page-mount
-// Fixed initialization sequence to hook into 'home' default routes
 document.addEventListener('DOMContentLoaded', () => {
     updateMenu('consumer');
-    updateMenu('home');
 });
