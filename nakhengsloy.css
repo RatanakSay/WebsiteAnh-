@@ -1,15 +1,7 @@
-Global Reset & Cyber-Minimal Variables
+/* ==========================================================================
    Global Reset & Minimal Light Theme Variables
    ========================================================================== */
 :root {
-    --bg-main: #0b0f19;
-    --bg-surface: #131a26;
-    --bg-surface-hover: #1c2638;
-    --accent: #00f0ff;
-    --accent-glow: rgba(0, 240, 255, 0.15);
-    --text-primary: #f1f5f9;
-    --text-muted: #94a3b8;
-    --border-color: rgba(255, 255, 255, 0.06);
     --bg-main: #f4f6fa;
     --bg-surface: #ffffff;
     --bg-surface-hover: #f8fafc;
@@ -21,20 +13,29 @@ Global Reset & Cyber-Minimal Variables
     --font-stack: 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
-@@ -27,7 +27,7 @@ body {
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-stack);
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
     overflow-x: hidden;
 }
 
-/* Custom Scrollbars */
 /* Custom Clean Scrollbars */
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
-@@ -36,21 +36,21 @@ body {
+}
+::-webkit-scrollbar-track {
     background: var(--bg-main);
 }
 ::-webkit-scrollbar-thumb {
-    background: var(--bg-surface-hover);
     background: #cbd5e1;
     border-radius: 10px;
 }
@@ -43,19 +44,19 @@ Global Reset & Cyber-Minimal Variables
 }
 
 /* ==========================================================================
-   Header & Premium Navigation
    Header & Navigation
    ========================================================================== */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: rgba(19, 26, 38, 0.8);
     background-color: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     padding: 0 40px;
-@@ -60,6 +60,7 @@ body {
+    height: 70px;
+    border-bottom: 1px solid var(--border-color);
+    position: fixed;
     top: 0;
     width: 100%;
     z-index: 1000;
@@ -63,15 +64,33 @@ Global Reset & Cyber-Minimal Variables
 }
 
 .logo {
-@@ -85,7 +86,6 @@ body {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-text {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+}
+
+.logo-n {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+}
+
+.logo-h {
+    font-size: 22px;
     font-weight: 700;
     color: var(--accent);
     letter-spacing: -0.5px;
-    text-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
 }
 
 .tagline {
-@@ -94,6 +94,7 @@ body {
+    font-size: 8px;
+    letter-spacing: 3px;
     color: var(--text-muted);
     margin-top: 2px;
     font-weight: 600;
@@ -79,23 +98,31 @@ Global Reset & Cyber-Minimal Variables
 }
 
 .nav-actions {
-@@ -103,10 +104,7 @@ body {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 /* ==========================================================================
-   Interactive Dropdown Menu
-   ========================================================================== */
-/* ==========================================================================
-   Interactive Dropdown Menu (Fixed Close Bug)
    Interactive Category Dropdown
    ========================================================================== */
 .dropdown {
     position: relative;
-@@ -125,38 +123,38 @@ body {
+    display: inline-block;
+}
+
+.dropbtn {
+    background-color: var(--bg-surface);
+    color: var(--text-primary);
+    padding: 10px 18px;
+    font-size: 14px;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 600;
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     transition: all 0.2s ease;
 }
 
@@ -107,20 +134,16 @@ Global Reset & Cyber-Minimal Variables
 .dropbtn:hover {
     background-color: var(--bg-surface-hover);
     border-color: var(--accent);
-    box-shadow: 0 0 15px var(--accent-glow);
     box-shadow: 0 4px 12px var(--accent-glow);
 }
 
-/* Positioning the container close to the button */
 .dropdown-content {
     display: none;
     position: absolute;
     right: 0;
-    top: 100%; /* Keeps it physically touching the button border */
     top: 100%;
     background-color: var(--bg-surface);
     min-width: 200px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
     border: 1px solid var(--border-color);
     border-radius: 8px;
@@ -128,26 +151,26 @@ Global Reset & Cyber-Minimal Variables
     z-index: 100;
     transform-origin: top right;
     animation: dropdownFade 0.2s ease;
-    margin-top: 4px; /* Creates visual spacing without breaking hover connection */
     margin-top: 4px;
 }
 
-/* This creates an invisible bridge between the button and menu so the cursor never leaves */
 /* Invisible structural bridge to maintain pointer hover focus status */
 .dropdown-content::before {
     content: '';
     position: absolute;
-@@ -168,36 +166,42 @@ body {
+    top: -10px;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: transparent;
 }
 
 @keyframes dropdownFade {
-    from { opacity: 0; transform: scale(0.95) translateY(-5px); }
     from { opacity: 0; transform: scale(0.97) translateY(-4px); }
     to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 .dropdown-content a {
-    color: var(--text-muted);
     color: var(--text-primary);
     padding: 12px 16px;
     text-decoration: none;
@@ -156,7 +179,6 @@ Global Reset & Cyber-Minimal Variables
     gap: 10px;
     font-size: 14px;
     font-weight: 500;
-    transition: all 0.2s ease;
     transition: all 0.15s ease;
 }
 
@@ -179,25 +201,99 @@ Global Reset & Cyber-Minimal Variables
 }
 
 /* ==========================================================================
-   Sidebar Navigation Panel
    Sidebar Component
    ========================================================================== */
 .sidebar-toggle {
     background-color: var(--bg-surface);
-@@ -268,7 +272,7 @@ body {
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.sidebar-toggle:hover {
+    background-color: var(--bg-surface-hover);
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+.main-container {
+    display: flex;
+    margin-top: 70px;
+    min-height: calc(100vh - 70px);
+}
+
+.sidebar {
+    width: 280px;
+    background-color: var(--bg-surface);
+    border-right: 1px solid var(--border-color);
+    padding: 25px 16px;
+    position: fixed;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 998;
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.text-accent {
+    color: var(--accent);
+}
+
+.sidebar h3 {
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sidebar ul {
+    list-style: none;
 }
 
 .sidebar ul li {
-    margin-bottom: 6px;
     margin-bottom: 4px;
 }
 
 .sidebar ul li a {
-@@ -290,15 +294,15 @@ body {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    display: block;
+    padding: 10px 14px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    border-left: 2px solid transparent;
+}
+
+.sidebar ul li a:hover {
+    background-color: var(--bg-surface-hover);
+    color: var(--text-primary);
+    padding-left: 18px;
 }
 
 .sidebar ul li a.active {
-    background-color: rgba(0, 240, 255, 0.06);
     background-color: rgba(0, 102, 255, 0.05);
     color: var(--accent);
     font-weight: 600;
@@ -206,25 +302,38 @@ Global Reset & Cyber-Minimal Variables
 }
 
 /* ==========================================================================
-   Content Frame Container
    Content Framework Panel Wrapper
    ========================================================================== */
 .content {
     margin-left: 280px;
-@@ -320,7 +324,7 @@ body {
+    width: calc(100% - 280px);
+    height: calc(100vh - 70px);
+    padding: 24px;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.content.expanded {
+    margin-left: 0;
+    width: 100%;
+}
+
+.frame-wrapper {
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-surface);
     border-radius: 12px;
     border: 1px solid var(--border-color);
     overflow: hidden;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
     box-shadow: 0 4px 20px rgba(15,23,42,0.04);
 }
 
 #content-frame {
-@@ -330,15 +334,15 @@ body {
+    width: 100%;
+    height: 100%;
+    border: none;
     display: block;
 }
 
-/* Mobile Screen Dimming Overlay */
 /* Mobile responsive overlay shader background */
 .sidebar-overlay {
     display: none;
@@ -233,33 +342,43 @@ Global Reset & Cyber-Minimal Variables
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
     background-color: rgba(15, 23, 42, 0.3);
     backdrop-filter: blur(4px);
     z-index: 997;
     opacity: 0;
-@@ -351,7 +355,7 @@ body {
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    display: block;
+    opacity: 1;
 }
 
 /* ==========================================================================
-   Responsive Adaptations
    Media Breakpoints
    ========================================================================== */
 @media screen and (max-width: 1024px) {
     .sidebar { width: 240px; }
-@@ -360,14 +364,13 @@ body {
+    .content { margin-left: 240px; width: calc(100% - 240px); }
+}
 
 @media screen and (max-width: 768px) {
     .navbar { padding: 0 20px; }
-    .main-container { margin-top: 70px; }
-
+    
     .sidebar {
         top: 70px;
         width: 260px;
         height: calc(100vh - 70px);
         transform: translateX(-100%);
-        box-shadow: 10px 0 30px rgba(0,0,0,0.5);
         box-shadow: 10px 0 30px rgba(0,0,0,0.05);
     }
 
     .sidebar.visible { transform: translateX(0); }
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .content {
+        margin-left: 0;
+        width: 100%;
+        padding: 12px;
+    }
+}
