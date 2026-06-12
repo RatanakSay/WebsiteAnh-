@@ -1,119 +1,384 @@
-// ====================================
-// SIDEBAR TOGGLE FUNCTIONALITY
-// ====================================
-const sidebarToggle = document.getElementById('sidebarToggle');
-const sidebar = document.getElementById('sidebar');
-const content = document.getElementById('content');
-const sidebarOverlay = document.getElementById('sidebarOverlay');
-
-let sidebarVisible = true;
-
-function isMobile() {
-    return window.innerWidth <= 768;
+/* ==========================================================================
+   Global Reset & Minimal Light Theme Variables
+   ========================================================================== */
+:root {
+    --bg-main: #f4f6fa;
+    --bg-surface: #ffffff;
+    --bg-surface-hover: #f8fafc;
+    --accent: #0066ff;
+    --accent-glow: rgba(0, 102, 255, 0.1);
+    --text-primary: #0f172a;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --font-stack: 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
-function initSidebarState() {
-    if (isMobile()) {
-        sidebar.classList.add('hidden');
-        sidebar.classList.remove('visible');
-        content.classList.add('expanded');
-        sidebarVisible = false;
-    } else {
-        sidebar.classList.remove('hidden');
-        sidebar.classList.remove('visible');
-        content.classList.remove('expanded');
-        sidebarVisible = true;
-    }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-stack);
+    -webkit-font-smoothing: antialiased;
 }
 
-function toggleSidebar() {
-    sidebarVisible = !sidebarVisible;
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    overflow-x: hidden;
+}
+
+/* Custom Clean Scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-main);
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+}
+
+/* ==========================================================================
+   Header & Navigation
+   ========================================================================== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 0 40px;
+    height: 70px;
+    border-bottom: 1px solid var(--border-color);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.logo {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-text {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+}
+
+.logo-n {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+}
+
+.logo-h {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+}
+
+.tagline {
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* ==========================================================================
+   Interactive Category Dropdown
+   ========================================================================== */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background-color: var(--bg-surface);
+    color: var(--text-primary);
+    padding: 10px 18px;
+    font-size: 14px;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.dropbtn i {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.dropbtn:hover {
+    background-color: var(--bg-surface-hover);
+    border-color: var(--accent);
+    box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: var(--bg-surface);
+    min-width: 200px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 100;
+    transform-origin: top right;
+    animation: dropdownFade 0.2s ease;
+    margin-top: 4px;
+}
+
+/* Invisible structural bridge to maintain pointer hover focus status */
+.dropdown-content::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: transparent;
+}
+
+@keyframes dropdownFade {
+    from { opacity: 0; transform: scale(0.97) translateY(-4px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.dropdown-content a {
+    color: var(--text-primary);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.15s ease;
+}
+
+.dropdown-content a i {
+    width: 16px;
+    color: var(--text-muted);
+}
+
+.dropdown-content a:hover {
+    background-color: var(--bg-surface-hover);
+    color: var(--accent);
+}
+
+.dropdown-content a:hover i {
+    color: var(--accent);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* ==========================================================================
+   Sidebar Component
+   ========================================================================== */
+.sidebar-toggle {
+    background-color: var(--bg-surface);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.sidebar-toggle:hover {
+    background-color: var(--bg-surface-hover);
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+.main-container {
+    display: flex;
+    margin-top: 70px;
+    min-height: calc(100vh - 70px);
+}
+
+.sidebar {
+    width: 280px;
+    background-color: var(--bg-surface);
+    border-right: 1px solid var(--border-color);
+    padding: 25px 16px;
+    position: fixed;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 998;
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.text-accent {
+    color: var(--accent);
+}
+
+.sidebar h3 {
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li {
+    margin-bottom: 4px;
+}
+
+.sidebar ul li a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    display: block;
+    padding: 10px 14px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    border-left: 2px solid transparent;
+}
+
+.sidebar ul li a:hover {
+    background-color: var(--bg-surface-hover);
+    color: var(--text-primary);
+    padding-left: 18px;
+}
+
+.sidebar ul li a.active {
+    background-color: rgba(0, 102, 255, 0.05);
+    color: var(--accent);
+    font-weight: 600;
+    border-left-color: var(--accent);
+    padding-left: 18px;
+}
+
+/* ==========================================================================
+   Content Framework Panel Wrapper
+   ========================================================================== */
+.content {
+    margin-left: 280px;
+    width: calc(100% - 280px);
+    height: calc(100vh - 70px);
+    padding: 24px;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.content.expanded {
+    margin-left: 0;
+    width: 100%;
+}
+
+.frame-wrapper {
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-surface);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(15,23,42,0.04);
+}
+
+#content-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+/* Mobile responsive overlay shader background */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.3);
+    backdrop-filter: blur(4px);
+    z-index: 997;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* ==========================================================================
+   Media Breakpoints
+   ========================================================================== */
+@media screen and (max-width: 1024px) {
+    .sidebar { width: 240px; }
+    .content { margin-left: 240px; width: calc(100% - 240px); }
+}
+
+@media screen and (max-width: 768px) {
+    .navbar { padding: 0 20px; }
     
-    if (isMobile()) {
-        if (sidebarVisible) {
-            sidebar.classList.remove('hidden');
-            sidebar.classList.add('visible');
-            sidebarOverlay.classList.add('active');
-        } else {
-            sidebar.classList.add('hidden');
-            sidebar.classList.remove('visible');
-            sidebarOverlay.classList.remove('active');
-        }
-    } else {
-        if (sidebarVisible) {
-            sidebar.classList.remove('hidden');
-            content.classList.remove('expanded');
-        } else {
-            sidebar.classList.add('hidden');
-            content.classList.add('expanded');
-        }
+    .sidebar {
+        top: 70px;
+        width: 260px;
+        height: calc(100vh - 70px);
+        transform: translateX(-100%);
+        box-shadow: 10px 0 30px rgba(0,0,0,0.05);
+    }
+
+    .sidebar.visible { transform: translateX(0); }
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .content {
+        margin-left: 0;
+        width: 100%;
+        padding: 12px;
     }
 }
-
-sidebarToggle.addEventListener('click', toggleSidebar);
-
-sidebarOverlay.addEventListener('click', function() {
-    if (isMobile() && sidebarVisible) {
-        toggleSidebar();
-    }
-});
-
-let resizeTimer;
-window.addEventListener('resize', function() {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function() {
-        initSidebarState();
-    }, 250);
-});
-
-initSidebarState();
-
-// ====================================
-// SIDEBAR HIGHLIGHT AUTOMATION
-// ====================================
-function highlightActiveSidebar() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const currentTopic = urlParams.get('topic') || 'home';
-    let currentPage = urlParams.get('page');
-
-    // Sync up with the active defaults setup in PHP index router
-    if (!currentPage) {
-        if (currentTopic === 'components') currentPage = 'resistor';
-        else if (currentTopic === 'smart-home') currentPage = 'formula';
-        else currentPage = 'home_dash';
-    }
-
-    // Inspect list items inside sidebar navigation and flag active states
-    const links = document.querySelectorAll('#sidebar-menu a');
-    links.forEach(a => {
-        const href = a.getAttribute('href') || '';
-        const queryString = href.split('?')[1] || '';
-        const linkUrl = new URLSearchParams(queryString);
-        if (linkUrl.get('page') === currentPage) {
-            a.classList.add('active');
-        } else {
-            a.classList.remove('active');
-        }
-    });
-}
-
-document.addEventListener('DOMContentLoaded', highlightActiveSidebar);
-
-// ====================================
-// THEME TOGGLE (DARK / LIGHT MODE)
-// ====================================
-const themeToggle = document.getElementById('themeToggle');
-
-function applyTheme(theme) {
-    if (theme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-        document.documentElement.removeAttribute('data-theme');
-    }
-    localStorage.setItem('nakheng-theme', theme);
-}
-
-themeToggle.addEventListener('click', function() {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    applyTheme(isDark ? 'light' : 'dark');
-});
